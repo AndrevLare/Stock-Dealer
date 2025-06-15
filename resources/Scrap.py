@@ -21,7 +21,7 @@ class Scraper():
         'Accept': 'text/html,application/xhtml+xml,application/xml',
         'Referer': 'https://www.google.com/'
     }
-    main_data_keys = ["previous_close", "day_range", "year_range", "market_cap", "average_volume", "primary_exchange", "ceo", "founded", "website", "employees"]
+    main_data_keys = ["previous_close", "day_range", "year_range", "market_cap", "average_volume", "p_e_ratio", "dividend_yield" ,"primary_exchange", "ceo", "founded", "website", "employees"]
 
     # Defines the attributes stock and exchange for the instance
     def __init__(self, stock, exchange):
@@ -40,15 +40,16 @@ class Scraper():
             "stock": self.stock,
             "time" : datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "current_value" : soup.find(class_="YMlKec fxKbKc").text,
-            "graph": self.__get_chart_data__()["xml"]
+            # "graph": self.__get_chart_data__()["xml"]
             }
             data.update(self.__get_text_from_html_list__(soup.find_all(class_="P6K39c")))
-        except:
+        except Exception as e:
+            print(f"Error al extraer datos: {e}")
             return None
         return data
-    def __get_text_from_html_list__(self, list:list)->dict:
+    def __get_text_from_html_list__(self, list_:list)->dict:
         output = {}
-        for i, e in enumerate(list):
+        for i, e in enumerate(list_):
             output[self.main_data_keys[i]] = e.text
         return output
 
