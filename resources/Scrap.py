@@ -40,11 +40,10 @@ class Scraper():
             "stock": self.stock,
             "time" : datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "current_value" : soup.find(class_="YMlKec fxKbKc").text,
-            "graph": self.__get_chart_data__("1d")["xml"]
+            "graph": self.__get_chart_data__()["xml"]
             }
             data.update(self.__get_text_from_html_list__(soup.find_all(class_="P6K39c")))
-        except Exception as e:
-            print(f"Error al obtener los datos: {e}")
+        except:
             return None
         return data
     def __get_text_from_html_list__(self, list:list)->dict:
@@ -77,7 +76,7 @@ class Scraper():
                 return None
         print("Se excedió el número máximo de reintentos")
         return None
-    def __get_chart_data__(self, time_range="1d"):
+    def __get_chart_data__(self):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
@@ -90,57 +89,14 @@ class Scraper():
             url = f"https://www.google.com/search?q={self.exchange}%3A{self.stock}"
             driver.get(url)
 
-            # Cambiar al iframe si existe (el gráfico a veces está en un iframe)
-            try:
-                iframes = driver.find_elements(By.TAG_NAME, "iframe")
-                if iframes:
-                    driver.switch_to.frame(iframes[0])
-            except:
-                pass
-
             # Esperar a que el gráfico esté completamente cargado
             WebDriverWait(driver, 15).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.uch-path"))
             )
-
-            # Mapeo de intervalos de tiempo
-            time_range_map = {
-                "1d": "1D",
-                "1m": "1M",
-                "6m": "6M",
-                "1y": "1Y",
-                "max": "Max"
-            }
-
-            # Cambiar el intervalo de tiempo si no es el predeterminado (1D)
-            if time_range != "1d":
-                target_range = time_range_map.get(time_range, "1M")
-
-                try:
-                    # Buscar y hacer clic en el botón del intervalo deseado
-                    range_button = WebDriverWait(driver, 10).until(
-                        EC.element_to_be_clickable((
-                            By.XPATH, f"//div[@role='button' and .//div[text()='{target_range}']")))
-                    range_button.click()
-
-                    # Esperar a que el gráfico se actualice
-                    time.sleep(2)  # Espera para la actualización del gráfico
-                    WebDriverWait(driver, 15).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, "div.uch-path"))
-                    )
-
-                    # Verificar que el botón está seleccionado
-                    WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((
-                            By.XPATH, f"//div[@role='button' and @aria-selected='true' and .//div[text()='{target_range}']"))
-                    )
-                except Exception as e:
-                    print(f"No se pudo cambiar al intervalo {time_range}: {str(e)}")
-                    # Continuar con el gráfico actual si no se puede cambiar
-
+            
             # Localizar el contenedor padre primero
             chart_container = driver.find_element(By.CSS_SELECTOR, "div.uch-path")
-
+            
             # Localizar el SVG específico que necesitas
             svg = chart_container.find_element(By.CSS_SELECTOR, "svg.uch-psvg")
 
@@ -159,8 +115,7 @@ class Scraper():
                 "gradients": {
                     "fill_gradient": svg.find_element(By.CSS_SELECTOR, "linearGradient[id^='fill-id']").get_attribute('outerHTML'),
                     "chart_gradient": svg.find_element(By.CSS_SELECTOR, "linearGradient[id^='chart-grad']").get_attribute('outerHTML')
-                },
-                "time_range": time_range  # Guardar el intervalo seleccionado
+                }
             }
 
             return svg_data
@@ -168,7 +123,9 @@ class Scraper():
         except Exception as e:
             print(f"Error al obtener el gráfico: {str(e)}")
             # Guardar screenshot para diagnóstico
-            driver.save_screenshot(f"error_screenshot_{time_range}.png")
+            driver.save_screenshot("error_screenshot.png")
+            # Imprimir parte del HTML para diagnóstico
+            print(driver.page_source[:5000])
             return None
         finally:
             driver.quit()
