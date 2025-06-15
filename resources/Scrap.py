@@ -33,13 +33,18 @@ class Scraper():
         response = self.__request_data__(f"https://www.google.com/finance/quote/{self.stock}:{self.exchange}?") # request the data
         soup = BeautifulSoup(response.text, "html.parser") # with bs4 organize the data
         # Diccionary with the return data
-        data = {
+        try:
+            data = {
+            "name": soup.find(class_="zzDege").text,
+            "about": soup.find(class_ = "bLLb2d").text,
             "stock": self.stock,
             "time" : datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "current_value" : soup.find(class_="YMlKec fxKbKc").text,
             "graph": self.__get_chart_data__()["xml"]
-        }
-        data.update(self.__get_text_from_html_list__(soup.find_all(class_="P6K39c")))
+            }
+            data.update(self.__get_text_from_html_list__(soup.find_all(class_="P6K39c")))
+        except:
+            return None
         return data
     def __get_text_from_html_list__(self, list:list)->dict:
         output = {}
@@ -127,6 +132,6 @@ class Scraper():
 
 if __name__ == "__main__":
     # Test
-    scrap = Scraper("KOF", "NYSE")
+    scrap = Scraper("TTWO", "NASDAQ")
     
     print("\n\n\n\n-------------------------------------\n", scrap.get_info())
