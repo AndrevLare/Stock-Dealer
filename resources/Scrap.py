@@ -134,6 +134,6 @@ class Scraper():
 
 if __name__ == "__main__":
     # Test
-    scrap = Scraper("NVDA", "NASDAQ")
+    scrap = Scraper("TTWO", "NASDAQ")
     
     print("\n\n\n\n-------------------------------------\n", scrap.get_info())
