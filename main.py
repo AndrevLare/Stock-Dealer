@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from resources.Docs import CreatePDF
 
 class Interface(tk.Tk):
     def __init__ (self):
@@ -17,7 +18,6 @@ class Interface(tk.Tk):
 
         compare = CodeInput(self)
         compare.grid(row = 0, column = 1, sticky = "nsew")
-        
 
 class CodeInput(ttk.Frame):
     def __init__ (self, parent):
@@ -71,7 +71,21 @@ class CodeInput(ttk.Frame):
         codes = self.get_codes()
         #data = FUNCIÓN_DE_JORGE(codes)
         #Calls scraper function and gives the action codes
-        data = {'time': '13/06/2025 21:59:03', 'current_value': '$96.44', 'previous_close': '$99.04', 'day_range': '$96.44 - $98.55', 'year_range': '$72.68 - $101.74', 'market_cap': '20.32B USD', 'average_volume': '268.44K', 'primary_exchange': 'NYSE', 'ceo': 'Ian M. Craig García', 'founded': 'Oct 30, 1991', 'website': 'coca-colafemsa.com', 'employees': '118,683'}
+        data = {
+        'stock_name': 'COCA-COLA FEMSA',
+        'time': '13/06/2025 21:59:03',
+        'current_value': '$96.44',
+        'previous_close': '$99.04',
+        'day_range': '$96.44 - $98.55',
+        'year_range': '$72.68 - $101.74',
+        'market_cap': '20.32B USD',
+        'average_volume': '268.44K',
+        'primary_exchange': 'NYSE',
+        'ceo': 'Ian M. Craig García',
+        'founded': 'Oct 30, 1991',
+        'website': 'coca-colafemsa.com',
+        'employees': '118,683'
+        }
         if data == None:
             pass            #QUIEN RAISEA EL ERROR?????????????????????????????????????????????
         #Verifies the data received
@@ -83,7 +97,7 @@ class CodeInput(ttk.Frame):
         Creates an instance of a DataPage object
         Showing the info of the action that the user looked for
         '''
-        self.data = DataPage(self, data)
+        self.data_page = DataPage(self, data)
 
 class DataPage(ttk.Frame):
     def __init__(self, parent, Data):
@@ -96,6 +110,7 @@ class DataPage(ttk.Frame):
         self.rowconfigure(0, weight = 1)
         self.data_label = ttk.Label(self, justify = "left",
                                     text = f"""\n
+                                    Stock name: {Data['stock_name']}
                                     Time: {Data['time']}\n
                                     Current Value: {Data['current_value']}\n
                                     Previous close: {Data['previous_close']}\n
@@ -112,6 +127,10 @@ class DataPage(ttk.Frame):
         self.clear_button = ttk.Button(self, text = "Clear",
                                        command = self.clear_page)
         self.clear_button.grid(row = 1, column = 0, sticky = "e")
+        self.pdf_create = CreatePDF(Data)
+        self.pdf_button = ttk.Button(self, text = "Download PDF",
+                                     command = self.pdf_create.to_pdf)
+        self.pdf_button.grid(row = 1, column = 1, sticky = "nsew")
 
     def clear_page(self):
         for w in self.winfo_children():
