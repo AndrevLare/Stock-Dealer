@@ -5,16 +5,21 @@ import pandas as pd
 
 class CreatePDF:
     def __init__(self, data: dict):
+        # Use defaultdict so missing keys return "N/A" instead of raising KeyError
         self.data_dict = defaultdict(lambda: "N/A", data)
 
     def to_pdf(self, filename=None):
+        # If no filename is provided, use the stock name as the PDF filename
         if filename is None:
             filename = f"{self.data_dict['stock_name']}.pdf"
-
+            
+        # Create an A4-sized figure and axis for the PDF
         fig, ax = plt.subplots(figsize=(8.27, 11.69))
-        ax.axis("tight")
-        ax.axis("off")
+        
+        ax.axis("tight")# Fit the table tightly in the axis
+        ax.axis("off")# Hide axis lines and ticks
 
+        # Add the main title at the top of the PDF
         stock_name = self.data_dict["stock_name"]
         plt.suptitle(f"{stock_name} REPORT", fontsize=18, fontweight="bold", y=0.98, color="#000000")
 
@@ -29,7 +34,7 @@ class CreatePDF:
             fontsize=12,
             color="black"
         )
-
+        # Define the fields to show in the table and their display order
         custom_fields = [
             ("Console time", "time"),
             ("Current Value", "current_value"),
@@ -57,7 +62,8 @@ class CreatePDF:
         table.auto_set_font_size(False)
         table.set_fontsize(12)
         table.scale(1.2, 1.2)
-
+        
+        # Style the header row for better visibility
         for (row, col), cell in table.get_celld().items():
             if row == 0:
                 cell.set_text_props(weight="bold", color="white")
@@ -75,7 +81,7 @@ class CreatePDF:
             pdf.savefig(fig, bbox_inches="tight", dpi=300)
             plt.close()
 
-# Example usage:
+# Example:
 if __name__ == "__main__":
     data = {'stock_name': 'TAKE-TWO INTERACTIVE SOFTWARE, INC Common Stock',
             'about': "Take-Two Interactive Software, Inc. is an American video game holding company based in New York City founded by Ryan Brant in September 1993.\nThe company owns three major publishing labels, Rockstar Games, Zynga and 2K, which operate internal game development studios. Take-Two created the Private Division label to support publishing from independent developers, though it sold the label in 2024. The company also formed Ghost Story Games which was a former 2K studio under the name Irrational Games. The company acquired the developers Socialpoint, Playdots and Nordeus to establish itself in the mobile game market. The company also owns 50% of professional esports organization NBA 2K League through NBA Take-Two Media. Take-Two's combined portfolio includes franchises such as BioShock, Borderlands, Civilization, Grand Theft Auto, NBA 2K, WWE 2K, and Red Dead among others.\nAs of April 2025, it is one of the largest publicly traded game companies globally with an estimated market cap of US$41 billion. Wikipedia",
