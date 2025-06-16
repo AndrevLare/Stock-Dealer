@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from resources.Docs import CreatePDF
+from resources.Scrap import Scraper
 
 class Interface(tk.Tk):
     def __init__ (self):
@@ -69,23 +70,25 @@ class CodeInput(ttk.Frame):
         
     def _process_data(self):
         codes = self.get_codes()
-        #data = FUNCIÓN_DE_JORGE(codes)
+        data = Scraper(codes[0], codes[1]).get_info()
+
         #Calls scraper function and gives the action codes
-        data = {
-        'stock_name': 'COCA-COLA FEMSA',
-        'time': '13/06/2025 21:59:03',
-        'current_value': '$96.44',
-        'previous_close': '$99.04',
-        'day_range': '$96.44 - $98.55',
-        'year_range': '$72.68 - $101.74',
-        'market_cap': '20.32B USD',
-        'average_volume': '268.44K',
-        'primary_exchange': 'NYSE',
-        'ceo': 'Ian M. Craig García',
-        'founded': 'Oct 30, 1991',
-        'website': 'coca-colafemsa.com',
-        'employees': '118,683'
-        }
+        # data = {
+        # 'stock_name': 'COCA-COLA FEMSA',
+        # 'time': '13/06/2025 21:59:03',
+        # 'current_value': '$96.44',
+        # 'previous_close': '$99.04',
+        # 'day_range': '$96.44 - $98.55',
+        # 'year_range': '$72.68 - $101.74',
+        # 'market_cap': '20.32B USD',
+        # 'average_volume': '268.44K',
+        # 'primary_exchange': 'NYSE',
+        # 'ceo': 'Ian M. Craig García',
+        # 'founded': 'Oct 30, 1991',
+        # 'website': 'coca-colafemsa.com',
+        # 'employees': '118,683'
+        # }
+
         if data == None:
             pass            #QUIEN RAISEA EL ERROR?????????????????????????????????????????????
         #Verifies the data received
@@ -110,7 +113,7 @@ class DataPage(ttk.Frame):
         self.rowconfigure(0, weight = 1)
         self.data_label = ttk.Label(self, justify = "left",
                                     text = f"""\n
-                                    Stock name: {Data['stock_name']}
+                                    Stock name: {Data['stock_name']}\n
                                     Time: {Data['time']}\n
                                     Current Value: {Data['current_value']}\n
                                     Previous close: {Data['previous_close']}\n

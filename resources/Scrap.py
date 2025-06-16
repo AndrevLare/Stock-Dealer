@@ -35,7 +35,7 @@ class Scraper():
         # Diccionary with the return data
         try:
             data = {
-            "name": soup.find(class_="zzDege").text,
+            "stock_name": soup.find(class_="zzDege").text,
             "about": soup.find(class_ = "bLLb2d").text,
             "stock": self.stock,
             "time" : datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
@@ -49,6 +49,7 @@ class Scraper():
         return data
     def __get_text_from_html_list__(self, list_:list)->dict:
         output = {}
+        print(list(map(lambda x: x.text, list_)))
         for i, e in enumerate(list_):
             output[self.main_data_keys[i]] = e.text
         return output
@@ -133,6 +134,6 @@ class Scraper():
 
 if __name__ == "__main__":
     # Test
-    scrap = Scraper("TTWO", "NASDAQ")
+    scrap = Scraper("NVDA", "NASDAQ")
     
     print("\n\n\n\n-------------------------------------\n", scrap.get_info())
