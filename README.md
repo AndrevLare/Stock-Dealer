@@ -1,4 +1,4 @@
-# Proyecto-POO
+# _Stock-Dealer_
 
 ## Diagrama de clases:
 
