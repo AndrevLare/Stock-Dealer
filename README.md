@@ -1,19 +1,19 @@
-# _Stock-Dealer_
-
+# _Stock-Dealer_ (POOyecto jajaja)
 ## Diagrama de clases:
 
 ```mermaid
----
-config:
-  theme: 'base'
-  themeVariables:
-    primaryColor: '#BB2528'
-    primaryTextColor: '#fff'
-    primaryBorderColor: '#7C0000'
-    lineColor: '#F8B229'
-    secondaryColor: '#006100'
-    tertiaryColor: '#fff'
----
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '#E91E63', /* Un rosa intenso */
+    'secondaryColor': '#673AB7', /* Un morado profundo */
+    'tertiaryColor': '#FFC107', /* Un amarillo brillante */
+    'background': '#303030', /* Un fondo gris oscuro */
+    'textColor': '#FFFFFF', /* Texto blanco para contraste */
+    'fontFamily': 'Comic Sans MS, cursive, sans-serif', /* Una fuente llamativa */
+    'edgeColor': '#BDBDBD' /* Gris claro para las líneas */
+  }
+}}%%
 classDiagram
 
     class Interface {
@@ -79,7 +79,6 @@ class Scraper {
     ComparePage --|> DataPage
     DataPage --|> ttk.Frame
     ComparePage --* Interface
-
 ```
 
 Hola geis, aqui una git guia (guita):
