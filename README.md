@@ -1,4 +1,4 @@
-# _Stock-Dealer_ (POOyecto jajaja)
+# _Stock-Dealer_ (POOyecto)
 ## Diagrama de clases:
 
 ```mermaid
