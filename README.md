@@ -1,4 +1,12 @@
 # _Stock-Dealer_ (POOyecto)
+
+## AUTORES
+<h3 style="display: flex; align-items:center">
+<img src="Misc/Taizoo.jpeg" alt="TaizooNameplate" width="310"/>
+  <img src="Misc/Gorje.jpeg" alt="GorjeNameplate" width="310"/>
+  <img src="Misc/Daniel.jpeg" alt="DanielNameplate" width="344"/>
+</h3>
+
 ## Diagrama de clases:
 
 ```mermaid
@@ -113,4 +121,3 @@ de hacer commit en todos sus cambios.
 git push origin main
 ```
 
-## AUTORES
