@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
+
 from resources.Docs import CreatePDF
 from resources.Scrap import Scraper
 
@@ -108,6 +110,7 @@ class DataPage(ttk.Frame):
         Receives a dictionary of the data collected and shows it in the GUI
         '''
         super().__init__()
+        self.data = Data
         self.grid(row = 4, column = parent.grid_info()["column"], sticky = "nsew")
         self.columnconfigure(0, weight = 1)
         self.rowconfigure(0, weight = 1)
@@ -132,8 +135,25 @@ class DataPage(ttk.Frame):
         self.clear_button.grid(row = 1, column = 0, sticky = "e")
         self.pdf_create = CreatePDF(Data)
         self.pdf_button = ttk.Button(self, text = "Download PDF",
-                                     command = self.pdf_create.to_pdf)
+                                     command = self.save_file)
         self.pdf_button.grid(row = 1, column = 1, sticky = "nsew")
+
+    def save_file(self):
+        save_file = filedialog.asksaveasfilename(
+                    defaultextension = ".pdf",
+                    title = "Save PDF",
+                    initialfile = f"{self.data['stock_name']}.pdf")
+        self.pdf_create.to_pdf(save_file)
+
+# class AskPath(tk.TK):
+#     def __init__(self):
+#         self.label = ttk.Label(row = 0, column = 0, sticky = "e")
+#         self.path_entry = ttk.Entry(row = 0, column = 1, sticky = "w")
+#         self.path_button = ttk.Button(row = 1,
+#                                       column = 0,
+#                                       columnspan = 2,
+#                                       text ="Download",
+#                                       command = )
 
     def clear_page(self):
         for w in self.winfo_children():
