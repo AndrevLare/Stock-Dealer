@@ -1,6 +1,52 @@
 # _Stock-Dealer_ (POOyecto jajaja)
 ## Diagrama de clases:
 
+# Diagrama de Clases (Balatro Style) 🃏
+
+```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#2B0B3F",
+    "primaryBorderColor": "#FF00FF",
+    "primaryTextColor": "#FFFFFF",
+    "lineColor": "#00F0FF",
+    "tertiaryColor": "#FF00FF",
+    "tertiaryBorderColor": "#00F0FF",
+    "fontFamily": "'Courier New', monospace"
+  },
+  "class": {
+    "classTitleFontWeight": "bold",
+    "classTextMargin": 10,
+    "borderRadius": 15
+  }
+}}%%
+
+classDiagram
+    class Interface {
+        +input: CodeInput
+        +compare: CodeInput
+        +__init__()
+    }
+
+    class CodeInput {
+        -parent: Interface
+        -ticker_entry
+        -exchange_entry
+        +get_codes()
+        +_process_data()
+    }
+
+    class DataPage {
+        -data_label
+        -pdf_button
+        +clear_page()
+    }
+
+    Interface "1" *-- "2" CodeInput
+    CodeInput --> DataPage : "Crea"
+    DataPage --> CreatePDF : "Genera PDF"
+
 ```mermaid
 
 classDiagram
