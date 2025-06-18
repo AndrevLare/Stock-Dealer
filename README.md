@@ -70,8 +70,6 @@ class Scraper {
     ComparePage --* Interface
 ```
 
-Hola geis, aqui una git guia (guita):
-
 ## Antes de empezar:
 
 Hagan pull antes de empezar, asi si alguien cambió algo cuando no estaban,
