@@ -1,3 +1,64 @@
-env/
 goldlatro.ico
-test1.pdf
+
+# Archivos específicos del entorno Python
+# Entornos virtuales
+env/
+.venv/
+venv/
+*.pyenv/
+
+# Archivos de caché y bytecode de Python
+__pycache__/
+*.pyc
+*.pyd
+*.so
+
+# Archivos de distribución de Python
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Archivos de prueba y cobertura (si los usas)
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Archivos específicos del IDE (ej. VS Code, PyCharm)
+.vscode/        # Carpeta de configuración de VS Code
+.idea/          # Carpeta de configuración de PyCharm
+*.iml           # Archivos de PyCharm
+*.sublime-project
+*.sublime-workspace
+
+# Archivos del sistema operativo
+.DS_Store       # macOS
+Thumbs.db       # Windows
+ehthumbs.db     # Windows
+Desktop.ini     # Windows
+
+# Archivos de log
+*.log
+*.log.*
+
+# Archivos de datos generados o temporales
+*.db            # Bases de datos SQLite u otras
+*.sqlite3
+*.csv
+*.json
+*.txt
+*.pdf           # <--- NUEVA LÍNEA: Excluye todos los archivos PDF
+TAKE-TWO INTERACTIVE SOFTWARE, ... # Tu archivo específico, si es generado
+
+# Archivos de configuración sensible (ej. credenciales, claves API)
+# ¡MUY IMPORTANTE! NO subas nunca credenciales a Git.
+.env            # Archivos de entorno (ej. para python-dotenv)
+config.ini      # Si tienes configuración con credenciales
+settings.pyc    # Si es una versión compilada de un archivo de configuración
+keys.json
+credentials.json
+
+# Docker
+# Archivos de selenium que puedan generarse
+error_screenshot.png # Tu archivo de depuración de Selenium
