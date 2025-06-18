@@ -2,8 +2,8 @@
 
 ## AUTORES
 <h3 style="display: flex; align-items:center">
-<img src="Misc/Taizoo.jpeg" alt="TaizooNameplate" width="260"/>
-  <img src="Misc/Gorje.jpeg" alt="GorjeNameplate" width="260"/>
+<img src="Misc/Taizoo.jpeg" alt="TaizooNameplate" width="262"/>
+  <img src="Misc/Gorje.jpeg" alt="GorjeNameplate" width="262"/>
   <img src="Misc/Daniel.jpeg" alt="DanielNameplate" width="291"/>
 </h3>
 
