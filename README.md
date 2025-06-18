@@ -1,5 +1,75 @@
 # Proyecto-POO
 
+## Diagrama de clases:
+
+``` mermaid
+classDiagram
+
+    class Interface {
+        +CodeInput input
+        +CodeInput compare
+        +ttk.Button compare_button
+        +__init__()
+    }
+
+    class CodeInput {
+        +Interface parent
+        +ttk.Label label
+        +ttk.Entry ticker_entry
+        +ttk.Entry exchange_entry
+        +ttk.Button button
+        +ttk.Label missing_code
+        +__init__()
+        +get_codes()
+        -create_info_page(data : dict) 
+        -process_data()
+    }
+
+class Scraper {
+        +dict headers
+        +list main_data_keys
+        +str stock
+        +str exchange
+        +__init__(stock: str, exchange: str)
+        +get_info() dict
+        - get_chart_data()
+        - get_text_from_html_list(list_: list) dict
+        - request_data(url: str) requests.Response | None
+    }
+
+    class DataPage {
+        +CodeInput parent
+        +ttk.Label data_label
+        +ttk.Button clear_button
+        +ttk.Button pdf_button
+        +CreatePDF pdf_create
+        +__init__(Data)
+        +clear_page()
+        -create_compare_page()
+    }
+
+    class CreatePDF {
+        +__init__(data : dict)
+        +to_pdf()
+    }
+
+    class ComparePage {
+        + __init__()
+        + compare_stocks()
+    }
+
+    Interface "1" *-- "2" CodeInput: contains
+    
+    Interface --|> tk.Tk
+    CodeInput --> Scraper: uses
+    CodeInput *-- DataPage: creates
+    DataPage --> CreatePDF: uses
+    CodeInput --|> ttk.Frame
+    ComparePage --|> DataPage
+    DataPage --|> ttk.Frame
+    ComparePage --* Interface
+```
+
 Hola geis, aqui una git guia (guita):
 
 ## Antes de empezar:
