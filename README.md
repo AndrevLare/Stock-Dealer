@@ -48,14 +48,15 @@ class Scraper {
         -create_compare_page()
     }
 
-    class CreatePDF {
-        +__init__(data : dict)
-        +to_pdf()
-    }
-
     class ComparePage {
         + __init__()
         + compare_stocks()
+    }
+
+    class CreatePDF {
+        - data_dict: defaultdict
+        + __init__(data: dict)
+        + to_pdf(filename=None)
     }
 
     Interface "1" *-- "2" CodeInput: contains
