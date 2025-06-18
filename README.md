@@ -2,18 +2,7 @@
 ## Diagrama de clases:
 
 ```mermaid
-%%{init: {
-  'theme': 'base',
-  'themeVariables': {
-    'primaryColor': '#E91E63', /* Un rosa intenso */
-    'secondaryColor': '#673AB7', /* Un morado profundo */
-    'tertiaryColor': '#FFC107', /* Un amarillo brillante */
-    'background': '#303030', /* Un fondo gris oscuro */
-    'textColor': '#FFFFFF', /* Texto blanco para contraste */
-    'fontFamily': 'Comic Sans MS, cursive, sans-serif', /* Una fuente llamativa */
-    'edgeColor': '#BDBDBD' /* Gris claro para las líneas */
-  }
-}}%%
+
 classDiagram
 
     class Interface {
