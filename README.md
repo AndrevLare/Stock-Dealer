@@ -1,6 +1,7 @@
 # _Stock-Dealer_ (POOyecto)
 
 ## AUTORES
+
 <h3 style="display: flex; align-items:center">
 <img src="Misc/Taizoo.jpeg" alt="TaizooNameplate" width="262"/>
   <img src="Misc/Gorje.jpeg" alt="GorjeNameplate" width="262"/>
@@ -29,7 +30,7 @@ classDiagram
         +ttk.Label missing_code
         +__init__()
         +get_codes()
-        -create_info_page(data : dict) 
+        -create_info_page(data : dict)
         -process_data()
     }
 
@@ -68,7 +69,7 @@ class Scraper {
     }
 
     Interface "1" *-- "2" CodeInput: contains
-    
+
     Interface --|> tk.Tk
     CodeInput --> Scraper: uses
     CodeInput *-- DataPage: creates
@@ -121,3 +122,53 @@ de hacer commit en todos sus cambios.
 git push origin main
 ```
 
+## Estructuras de datos usadas:
+
+Para winners-losers-actives:
+
+obteniendo la data de forma:
+
+```
+Scrapper().winners_lossers_actives()
+```
+
+puedes acceder a las tres secciones de la forma:
+
+```
+# Ejemplo de uso
+
+scrapper = Scrapper()
+
+raw_data = scrapper.winners_losers_actives()
+
+
+# Las 3 listas se acceden asi:
+
+winners = raw_data.winners
+losers = raw_data.losers
+actives = raw_data.actives
+```
+
+Estos datos son listas de diccionarios, ejemplo de acceso:
+
+```
+if __name__ == "__main__":
+    # Test
+    scrap = Scraper()
+    market_data = scrap.winners_lossers_actives()
+
+    # Obtener datos de cada acción ganadora
+    print("=== TOP GAINERS ===")
+    for stock in market_data.winners:
+        ticker = stock['ticker']
+        price = stock['price']
+        change_amount = stock['change_amount']
+        change_percentage = stock['change_percentage']
+        volume = stock['volume']
+
+        print(f"Ticker: {ticker}")
+        print(f"Precio: ${price}")
+        print(f"Cambio: ${change_amount} ({change_percentage})")
+        print(f"Volumen: {volume}")
+        print("-" * 30)
+```
