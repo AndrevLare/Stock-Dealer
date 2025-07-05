@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el resto de los archivos de tu aplicación
+# Copia el resto de los archivos de tu aplicaciónxfcsdfdsfdsfsxfgdgjsjdrertyu
 COPY . .
 
 # Define el comando por defecto que se ejecutará al iniciar el contenedor
