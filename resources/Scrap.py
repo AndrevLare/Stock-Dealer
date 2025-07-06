@@ -19,17 +19,21 @@ class Scraper():
         return random.choice(self.__api_keys__)
     
     def winners_lossers_actives(self):
-        url = f"{self.__base_url__}function=TOP_GAINERS_LOSERS&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=TOP_GAINERS_LOSERS&apikey={self.__api_key__}" 
         r = requests.get(url)
         raw_data = r.json()
-        print(raw_data)
         data = SimpleNamespace(
             winners= raw_data.get('top_gainers', []),
             losers= raw_data.get('top_losers', []),
             actives= raw_data.get('most_actively_traded', [])
-        )
+        ) if raw_data else SimpleNamespace(winners=[], losers=[], actives=[])
         return data
         
+    def company_info(self, ticker):
+        url = f"{self.__base_url__}function=OVERVIEW&symbol={ticker}&apikey={self.__api_key__}"
+        r = requests.get(url)
+        data = r.json()
+        return SimpleNamespace(**data) if data else None
 
     def get_info_and_1D_graph(self, ticker):
         url = f"{self.__base_url__}function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=1min&apikey={self.__api_key__}"
