@@ -1,14 +1,31 @@
 <meta charset="UTF-8">
 <html lang="es">
-<button>HOLA</button>
 <html>
 <head>
 <title>{{TITULO}}</title>
 </head>
 <body>
 
-<h1>This is a heading</h1>
-<p>la descripcion es {{PARRAFO}}</p>
+<h1>GANADORES Y PERDEDORES!</h1>
+
+<table class="table" border="1">
+  <tr class="table__tr">
+    <th class="table__tr__th">Ticker</th>
+    <th class="table__tr__th">Price</th>
+    <th class="table__tr__th">Change Amount</th>
+    <th class="table__tr__th">Change %</th>
+    <th class="table__tr__th">Volume</th>
+  </tr>
+  {% for t in tickers %}
+  <tr>
+    <td class="table__tr__td">{{ t.ticker }}</td>
+    <td class="table__tr__td">{{ t.price }}</td>
+    <td class="table__tr__td">{{ t.change_amount }}</td>
+    <td class="table__tr__td">{{ t.change_percentage }}</td>
+    <td class="table__tr__td">{{ t.volume }}</td>
+  </tr>
+  {% endfor %}
+</table>
 
 </body>
-</html> 
+</html>
