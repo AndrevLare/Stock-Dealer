@@ -4,23 +4,39 @@ import pdfkit
 from collections import defaultdict
 
 class PDF:
-    def __init__(self, ruta_template: str, info: dict, ruta_css=''):
-        self.nombre_template = os.path.basename(ruta_template)
-        self.ruta_template = os.path.dirname(ruta_template)
+    def __init__(self, info: dict, css_path=''):
+        #os. functions, so it works on both win and linux
+        template_path = os.path.dirname(os.path.abspath(__file__))
+        template_name = "template.html"
+        self.css_path = css_path
         self.info = info
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_path))
+        template = env.get_template(template_name)
+        self.html = template.render(self.info)
+        #defining pdf parameters
+        self.options = {"page-size": "Letter",
+                   "margin-top": "0.05in",
+                   "margin-right": "0.05in",
+                   "margin-bottom": "0.05in",
+                   "margin-left": "0.05in",
+                   "encoding":"UTF-8"}
+        #Defining the path of this package
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        wkhtmltopdf_path = os.path.join(project_root, 
+                                         "wkhtmltopdf", 
+                                         "bin", 
+                                         "wkhtmltopdf.exe")
+        self.config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+        self.output_path = r"C:\Users\danie\OneDrive\Documentos\POOyecto\resources\DOCS\prueba.pdf"
+    
+    def to_pdf(self):
+        pdfkit.from_string(self.html,self.output_path,css=self.css_path,options=self.options, configuration= self.config)
 
-    def create_pdf(self):
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.ruta_template))
-        template = env.get_template(self.nombre_template)
-        html = template.render(self.info)
-        options = {"page-size": "Letter", }
-        print(html)
-#hola
 # Example:
 if __name__ == "__main__":
     info = {"TITULO":"HOLA",
             "PARRAFO":"LOREM IPSUM"}
-    ruta = r"C:\Users\danie\OneDrive\Documentos\POOyecto\resources\__pycache__\DOCS\template.html"
-    pdf = PDF(ruta, info)
-    pdf.create_pdf()
+    pdf = PDF(info)
+    pdf.to_pdf()
+
 
