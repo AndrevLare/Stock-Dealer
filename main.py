@@ -1,180 +1,150 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter import filedialog
-
-from resources.Docs import CreatePDF
 from resources.Scrap import Scraper
-
+import ttkbootstrap as ttk
+big_title = ("Bookman Old Style", 42)
+title = ("Bookman Old Style", 30)
+subtitle = ("Courier New", 18, "bold")
+body = ("Courier New", 11, "normal")
 class Interface(tk.Tk):
     def __init__ (self):
         '''
         Initialization of the interface
         '''
         super().__init__()
-        self.geometry("700x500")
-        self.title("Cosas chéveres!!!")
-        self.columnconfigure((0, 1), weight = 1, minsize = 350)
-        self.rowconfigure(0, weight = 1)
-
-        input = CodeInput(self)
-        input.grid(row = 0, column = 0, sticky = "nsew")
-
-        compare = CodeInput(self)
-        compare.grid(row = 0, column = 1, sticky = "nsew")
-
-class CodeInput(ttk.Frame):
+        self.style = ttk.Style(theme = "darkly")
+        self.geometry("900x600")
+        self.title("Stock dealer :error:")
+        self.rowconfigure((0, 1), weight = 1)
+        self.columnconfigure(0, weight = 1)
+        self.heading = Heading(self)
+        self.heading.grid(row = 0, column = 0, sticky = "wen")
+        self.main_page = MainPage(self)
+        self.main_page.grid(row = 1, column = 0, sticky = "new")
+class Heading(ttk.Frame):
     def __init__ (self, parent):
         '''
-        Initialization of input template (button, entries and label)
-        Receives parent Interface and a bool to verify if it's the
-        search or the compare button 
+        Initialization of frame Heading
+        Contains: Title, Icon(?????????), Backgroung and Search instance
+        Its present in every page
         '''
+        super().__init__(parent, bootstyle = "primary", height = 100)
         self.parent = parent
-        super().__init__()
-        self.columnconfigure(0, weight = 1)
-        self.label = ttk.Label(self, text = f"Enter ticker:\nEnter exchange code",
-                               justify = "left")
-        self.label.grid(row = 0, column = 0, sticky = "we", padx = 5, rowspan=2)
-        #Creates a label asking for ticker and the exchange code
-
-        self.ticker_entry = ttk.Entry(self)
-        self.ticker_entry.grid(row = 0, column = 1, padx = 30)
-        self.exchange_entry = ttk.Entry(self)
-        self.exchange_entry.grid(row = 1, column = 1, padx = 30)
-        #Creates two entry widgets: one for ticker and the other for the exchange code
-
-        self.button = ttk.Button(self, text = "Search", command = self._process_data)
-        self.button.grid(row = 2, column = 0, columnspan = 2)
-        #Creates button for searching
-
-        self.missing_code = ttk.Label(self, text = "Please write both: Ticker and exchange")
-        #Label that only appears if user doesn't write anything in the entries
-
-    def get_codes(self):
-        '''
-        Getter for both entries.
-        Creates a variable called codes which is a tuple with the following data:
-        ("ticker", "exchange")
-        Both in uppercase.
-        It doesn't accept empty inputs.
-        '''
-        self.missing_code.grid_remove()
-        if self.ticker_entry.get() == "" or self.exchange_entry.get() == "":
-            self.button.grid_remove()
-            self.button.grid(row = 3, column = 0, columnspan = 2)
-            self.missing_code.grid(row = 2, column = 0, columnspan = 2)
-            return None
-        else:
-            codes = (self.ticker_entry.get().upper(),
-                    self.exchange_entry.get().upper())
-            print(codes)
-            return codes
-        
-    def _process_data(self):
-        codes = self.get_codes()
-        data = Scraper(codes[0], codes[1]).get_info()
-
-        #Calls scraper function and gives the action codes
-        # data = {
-        # 'stock_name': 'COCA-COLA FEMSA',
-        # 'time': '13/06/2025 21:59:03',
-        # 'current_value': '$96.44',
-        # 'previous_close': '$99.04',
-        # 'day_range': '$96.44 - $98.55',
-        # 'year_range': '$72.68 - $101.74',
-        # 'market_cap': '20.32B USD',
-        # 'average_volume': '268.44K',
-        # 'primary_exchange': 'NYSE',
-        # 'ceo': 'Ian M. Craig García',
-        # 'founded': 'Oct 30, 1991',
-        # 'website': 'coca-colafemsa.com',
-        # 'employees': '118,683'
-        # }
-
-        if data == None:
-            pass            #QUIEN RAISEA EL ERROR?????????????????????????????????????????????
-        #Verifies the data received
-        self.create_info_page(data)
-        #Calls the function that shows the data received
-
-    def create_info_page(self, data):
-        '''
-        Creates an instance of a DataPage object
-        Showing the info of the action that the user looked for
-        '''
-        self.data_page = DataPage(self, data)
-
-class DataPage(ttk.Frame):
-    def __init__(self, parent, Data):
-        '''
-        Receives a dictionary of the data collected and shows it in the GUI
-        '''
-        super().__init__()
-        self.data = Data
-        self.grid(row = 4, column = parent.grid_info()["column"], sticky = "nsew")
         self.columnconfigure(0, weight = 1)
         self.rowconfigure(0, weight = 1)
-        self.data_label = ttk.Label(self, justify = "left",
-                                    text = f"""\n
-                                    Stock name: {Data['stock_name']}\n
-                                    Time: {Data['time']}\n
-                                    Current Value: {Data['current_value']}\n
-                                    Previous close: {Data['previous_close']}\n
-                                    Day Range: {Data['day_range']} \n
-                                    Year Range: {Data['year_range']} \n
-                                    Market cap: {Data['market_cap']} \n
-                                    Average volume: {Data['average_volume']} \n
-                                    Primary exchange: {Data['primary_exchange']} \n
-                                    CEO: {Data['ceo']} \n
-                                    Founded: {Data['founded']} \n
-                                    Website: {Data['website']} \n
-                                    Employees: {Data['employees']}""")
-        self.data_label.grid(row = 0, column = 0, sticky = "nsew")
-        self.clear_button = ttk.Button(self, text = "Clear",
-                                       command = self.clear_page)
-        self.clear_button.grid(row = 1, column = 0, sticky = "e")
-        self.pdf_create = CreatePDF(Data)
-        self.pdf_button = ttk.Button(self, text = "Download PDF",
-                                     command = self.save_file)
-        self.pdf_button.grid(row = 1, column = 1, sticky = "nsew")
-
-    def save_file(self):
-        save_file = filedialog.asksaveasfilename(
-                    defaultextension = ".pdf",
-                    title = "Save PDF",
-                    initialfile = f"{self.data['stock_name']}.pdf")
-        self.pdf_create.to_pdf(save_file)
-
-# class AskPath(tk.TK):
-#     def __init__(self):
-#         self.label = ttk.Label(row = 0, column = 0, sticky = "e")
-#         self.path_entry = ttk.Entry(row = 0, column = 1, sticky = "w")
-#         self.path_button = ttk.Button(row = 1,
-#                                       column = 0,
-#                                       columnspan = 2,
-#                                       text ="Download",
-#                                       command = )
-
-    def clear_page(self):
-        for w in self.winfo_children():
-            w.destroy()
-
-#{'time': '13/06/2025 21:59:03',
-#'current_value': '$96.44',
-#'previous_close': '$99.04',
-#'day_range': '$96.44 - $98.55',
-#'year_range': '$72.68 - $101.74',
-#'market_cap': '20.32B USD',
-#'average_volume': '268.44K',
-#'primary_exchange': 'NYSE',
-#'ceo': 'Ian M. Craig García',
-#'founded': 'Oct 30, 1991',
-#'website': 'coca-colafemsa.com',
-#'employees': '118,683'}
-
+        self.grid_propagate(False)
+        self.title = ttk.Label(self,
+                               text = "Stock-Dealer :error:",
+                               font = big_title,
+                               bootstyle = "inverse-primary")
+        self.title.grid(row = 0, column = 0, sticky = "w")
+        self.search = Search(self)
+        self.search.grid(row = 0, column = 1, sticky = "e")
+class Search(ttk.Frame):
+    def __init__(self, parent):
+        '''
+        Initialization of Search
+        Contains: label, entry and button
+        Button calls the create_stock_page() function
+        '''
+        super().__init__(parent, bootstyle = "primary")
+        self.parent = parent
+        self.columnconfigure(0, weight = 1)
+        self.rowconfigure(0, weight = 1)
+        self.label = ttk.Label(self,
+                               text = "Enter the ticker code you are looking for",
+                               font = subtitle,
+                               style = "inverse-primary",
+                               wraplength = 350)
+        self.label.grid(row = 0, column = 0, sticky = "ensw", rowspan = 2)
+        self.input = ttk.Entry(self)
+        self.input.grid(row = 0, column = 1, sticky = "nesw", padx = 5)
+        self.button = ttk.Button(self, text = "Search",
+                                 command = self.__create_stock_page,
+                                 bootstyle = "secondary")
+        self.button.grid(row = 1, column = 1, sticky = "nesw", padx = 5)
+    def __create_stock_page(self):
+        self.parent.parent.main_page.grid_remove()
+class MainPage(ttk.Frame):
+    def __init__ (self, parent):
+        '''
+        Intitialization of main page
+        '''
+        super().__init__(parent)
+        self.columnconfigure(0, weight = 1)
+        self.rowconfigure((0, 1, 2), weight = 1)
+        # self.label = ttk.Label(self, text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        #                        font = body,
+        #                        wraplength = 400)
+        #self.label.grid(row = 0, column = 0, sticky = "nw")
+        scraper = Scraper()
+        data = scraper.winners_losers_actives()
+        self.winners = TopsWidget(self, data.winners, "Winners")
+        self.winners.grid(row = 0, column = 0, sticky = "nw")
+        self.losers = TopsWidget(self, data.losers, "Losers")
+        self.losers.grid(row = 1, column = 0, sticky = "nw")
+        self.actives = TopsWidget(self, data.actives, "Actives")
+        self.actives.grid(row = 2, column = 0, sticky = "nw", )
+class TopsWidget(ttk.Frame):
+    def __init__ (self, parent, data:Scraper, section:str):
+        '''
+        Initialization of Tops widgets (for showing top winners,
+        top losers and most active)
+        '''
+        super().__init__(parent)
+        self.rowconfigure(0, weight = 1)
+        self.label = ttk.Label(self, text = f"{section}",
+                               font = title)
+        self.label.grid(row = 0, column = 0)
+        if data == None or len(data) == 0:
+            self.nodata = InfoNotObtained(self)
+            self.nodata.grid(row = 1, column = 0, sticky = "nw")
+        print(data)
+        self.w_1 = None
+        self.w_2 = None
+        self.w_3 = None
+        self.w_4 = None
+        self.w_5 = None
+        self.widget = [self.w_1, self.w_2, self.w_3, self.w_4, self.w_5]
+        for n, stock  in enumerate(data):
+            self.columnconfigure(n, weight=1)
+            self.widget[n] = StockMiniInfo(self, stock)
+            self.widget[n].grid(row = 1, column = n, padx = 10, sticky = "nsew")
+            if n == 4:
+                break
+class InfoNotObtained(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.label = ttk.Label(self,
+                               text = "There was a problem and we couldn't load the info",
+                               bootstyle = "danger",
+                               font = subtitle,
+                               justify = "left")
+        self.label.grid(row = 0, column = 0, sticky = "nw")
+class StockMiniInfo(ttk.Frame):
+    def __init__(self, parent, data):
+        super().__init__(parent,
+                         bootstyle = "secondary",
+                         width = 100,
+                         height = 100)
+        self.columnconfigure(0, weight = 1)
+        self.rowconfigure(0, weight = 1)
+        self.label_1 = ttk.Label(self, text = f"{data['ticker']}",
+                                 font = subtitle,
+                                 bootstyle = "inverse-secondary",
+                                 justify = "center")
+        self.label_1.grid(row = 0, column = 0, sticky = "nsew")
+        self.label_2 = ttk.Label(self, text = f"{data['price']}(+{data['change_percentage']})",
+                                 font = body, bootstyle = "success")
+        self.label_2.grid(row = 1, column = 0, sticky = "nsew")
+    # def save_file(self):
+    #     save_file = filedialog.asksaveasfilename(
+    #                 defaultextension = ".pdf",
+    #                 title = "Save PDF",
+    #                 initialfile = f"{self.data['stock_name']}.pdf")
+    #     self.pdf_create.to_pdf(save_file)
 def main():
     interface = Interface()
     interface.mainloop()
-
 if __name__ == "__main__":
     main()
