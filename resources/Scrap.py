@@ -11,14 +11,14 @@ load_dotenv()
 #Class Scrapper
 class Scraper():
     def __init__(self):
-        self.__api_keys__ = [os.getenv('API_KEY_1', 'demo'), os.getenv('API_KEY_2', 'demo'), os.getenv('API_KEY_3', 'demo')]
+        self.__api_keys__ = [os.getenv('API_KEY_2', 'demo'), os.getenv('API_KEY_3', 'demo')]
         self.__base_url__ = os.getenv('BASE_URL', 'https://www.alphavantage.co/query?')
 
     # returns an random api key from the list of api keys
     def __api_key__(self):
         return random.choice(self.__api_keys__)
     
-    def winners_lossers_actives(self):
+    def winners_losers_actives(self):
         url = f"{self.__base_url__}function=TOP_GAINERS_LOSERS&apikey={self.__api_key__}" 
         r = requests.get(url)
         raw_data = r.json()
