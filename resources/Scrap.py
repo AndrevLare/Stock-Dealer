@@ -112,5 +112,20 @@ class Scraper():
 if __name__ == "__main__":
     # Test
     scrap = Scraper()
+<<<<<<< Updated upstream
     print(scrap.get_info_and_1D_graph('AAPL'))
+=======
+    
+    ticker = "AAPL"
+day_info = scrap.get_info_and_1D_graph(ticker)
+
+if day_info:
+    print(f"Last Refreshed: {day_info.last_refreshed}")
+    print(f"Current Value: {day_info.current_value}")
+    print("Values:", day_info.values)
+
+else:
+    print("No data found for the ticker.")
+
+>>>>>>> Stashed changes
     print("Estas en un entorno de pruebas para Scrapper, si quieres ejecutar el programa, ejecuta el main.py")
