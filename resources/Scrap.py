@@ -55,7 +55,7 @@ class Scraper():
         for i, e in enumerate(raw_data["Time Series (15min)"]):
             if i > 95:  # Limit to the last 30 days
                 break
-            values.append(raw_data["Time Series (15min)"][e].get('4. close', 0))
+            values.append((raw_data["Time Series (15min)"][e].get('4. close', 0), e))
             
         data = SimpleNamespace(
             last_refreshed=raw_data.get('Meta Data', {}).get('3. Last Refreshed', ''),
@@ -74,7 +74,7 @@ class Scraper():
         for i, e in enumerate(raw_data["Time Series (Daily)"]):
             if i > 30:  # Limit to the last 30 days
                 break
-            values.append(raw_data["Time Series (Daily)"][e].get('4. close', 0))
+            values.append((raw_data["Time Series (Daily)"][e].get('4. close', 0), e))
             
         data = SimpleNamespace(
             last_refreshed=raw_data.get('Meta Data', {}).get('3. Last Refreshed', ''),
@@ -92,7 +92,7 @@ class Scraper():
         for i, e in enumerate(raw_data["Weekly Time Series"]):
             if i > 48:  # Limit to the last 48 weeks (1 year)
                 break
-            values.append(raw_data["Weekly Time Series"][e].get('4. close', 0))
+            values.append((raw_data["Weekly Time Series"][e].get('4. close', 0), e))
             
         data = SimpleNamespace(
             last_refreshed=raw_data.get('Meta Data', {}).get('3. Last Refreshed', ''),
@@ -100,6 +100,14 @@ class Scraper():
         )
         return data if raw_data else None
 
+    def get_ticker_sentiment(self, ticker):
+        """Get sentiment data for a given ticker."""
+        url = f"{self.__base_url__}function=NEWS_SENTIMENT&tickers={ticker}&apikey={self.__api_key__}"
+        r = requests.get(url)
+        raw_data = r.json()
+        for e in raw_data["feed"]:
+            pass
+            
    
 if __name__ == "__main__":
     # Test
