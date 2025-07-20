@@ -173,7 +173,7 @@ if __name__ == "__main__":
         print("-" * 30)
 ```
 
-## Para Obtener la info de la compañia:
+## Para Obtener la info y valores de la accion de la compañia:
 
 obteniendo la data de forma:
 
@@ -253,4 +253,45 @@ Siendo "key" el nombre del valor al que quieres accesar, aqui un JSON de ejemplo
     "DividendDate": "2025-06-10",
     "ExDividendDate": "2025-05-09"
 }
+```
+
+## Dia, Mes y Año:
+
+con las funciones get_info_and_1D_graph(), get_1M_graph() y get_1Y_graph()
+podemos acceder al historico de valores de la accion, si no encuentra info,
+se retorna None,
+
+```
+#ejemplo de uso
+
+ticker = "AAPL"
+day_info = scrap.get_info_and_1D_graph(ticker)
+
+if day_info:
+    print(f"Last Refreshed: {day_info.last_refreshed}")
+    print(f"Current Value: {day_info.current_value}")
+    print("Values:", day_info.values)
+
+else:
+    print("No data found for the ticker.")
+
+
+month_info = scrap.get_1M_graph(ticker)
+
+if month_info:
+    print(f"Last Refreshed: {month_info.last_refreshed}")
+    print("Values:", month_info.values)
+
+else:
+    print("No data found for the ticker.")
+
+
+year_info = scrap.get_1Y_graph(ticker)
+
+if year_info:
+    print(f"Last Refreshed: {year_info.last_refreshed}")
+    print("Values:", year_info.values)
+
+else:
+    print("No data found for the ticker.")
 ```
