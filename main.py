@@ -41,7 +41,11 @@ class Heading(ttk.Frame):
         Initialization of frame Heading
         Contains: Title, Icon(?????????), Backgroung and Search instance
         Its present in every page
+        Initialization of frame Heading
+        Contains: Title, Icon(?????????), Backgroung and Search instance
+        Its present in every page
         '''
+        super().__init__(parent, bootstyle = "primary", height = 100)
         super().__init__(parent, bootstyle = "primary", height = 100)
         self.parent = parent
         self.columnconfigure(0, weight = 1)
@@ -230,6 +234,5 @@ class StockInfo(ttk.Frame):
 def main():
     interface = Interface()
     interface.mainloop()
-
 if __name__ == "__main__":
     main()
