@@ -26,7 +26,7 @@ class Scraper():
     def winners_losers_actives(self):
         """Get top gainers, losers, and most actively traded stocks."""
         
-        url = f"{self.__base_url__}function=TOP_GAINERS_LOSERS&apikey={self.__api_key__}" 
+        url = f"{self.__base_url__}function=TOP_GAINERS_LOSERS&apikey={self.__api_key__()}" 
         r = requests.get(url)
         raw_data = r.json()
         data = SimpleNamespace(
@@ -39,7 +39,7 @@ class Scraper():
     def company_info(self, ticker):
         """Get company information for a given ticker."""
         
-        url = f"{self.__base_url__}function=OVERVIEW&symbol={ticker}&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=OVERVIEW&symbol={ticker}&apikey={self.__api_key__()}"
         r = requests.get(url)
         data = r.json()
         return SimpleNamespace(**data) if data else None
@@ -47,7 +47,7 @@ class Scraper():
     def get_info_and_1D_graph(self, ticker):
         """Get company information and 1-day graph data for a given ticker."""
         
-        url = f"{self.__base_url__}function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=15min&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=15min&apikey={self.__api_key__()}"
         r = requests.get(url)
         raw_data = r.json()
         first_timestamp = list(raw_data["Time Series (15min)"].keys())[0]
@@ -67,7 +67,7 @@ class Scraper():
     def get_1M_graph(self, ticker):
         """Get 1-month graph data for a given ticker."""
         
-        url = f"{self.__base_url__}function=TIME_SERIES_DAILY&symbol={ticker}&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=TIME_SERIES_DAILY&symbol={ticker}&apikey={self.__api_key__()}"
         r = requests.get(url)
         raw_data = r.json()
         values = []
@@ -85,7 +85,7 @@ class Scraper():
     def get_1Y_graph(self, ticker):
         """Get 1-year graph data for a given ticker."""
         
-        url = f"{self.__base_url__}function=TIME_SERIES_WEEKLY&symbol={ticker}&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=TIME_SERIES_WEEKLY&symbol={ticker}&apikey={self.__api_key__()}"
         r = requests.get(url)
         raw_data = r.json()
         values = []
@@ -102,15 +102,27 @@ class Scraper():
 
     def get_ticker_sentiment(self, ticker):
         """Get sentiment data for a given ticker."""
-        url = f"{self.__base_url__}function=NEWS_SENTIMENT&tickers={ticker}&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=NEWS_SENTIMENT&tickers={ticker}&apikey={self.__api_key__()}"
         r = requests.get(url)
         raw_data = r.json()
+        overall_sentiment = []
         for e in raw_data["feed"]:
-            pass
-            
-   
+            ticker_sentiment = e["ticker_sentiment"]
+            for j in ticker_sentiment:
+                if j["ticker"] == ticker:
+                    overall_sentiment.append((float(j["ticker_sentiment_score"]), float(j["relevance_score"])))
+        sentiment = 0.0
+        overall_relevance_score = 0.0
+        for e in overall_sentiment:
+            sentiment += e[0] * e[1]
+            overall_relevance_score += e[1]
+        sentiment /= overall_relevance_score if overall_sentiment else 1
+        return sentiment if overall_sentiment else None
+                    
+                    
 if __name__ == "__main__":
     # Test
     scrap = Scraper()
-    print(scrap.get_info_and_1D_graph('AAPL'))
+    print(scrap.company_info("TELO"))
+    print(scrap.get_ticker_sentiment("AAPL"))
     print("Estas en un entorno de pruebas para Scrapper, si quieres ejecutar el programa, ejecuta el main.py")
