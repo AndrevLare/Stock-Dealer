@@ -47,17 +47,19 @@ class Scraper():
     def get_info_and_1D_graph(self, ticker):
         """Get company information and 1-day graph data for a given ticker."""
         
-        url = f"{self.__base_url__}function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=1min&apikey={self.__api_key__}"
+        url = f"{self.__base_url__}function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=15min&apikey={self.__api_key__}"
         r = requests.get(url)
         raw_data = r.json()
-        first_timestamp = list(raw_data["Time Series (1min)"].keys())[0]
+        first_timestamp = list(raw_data["Time Series (15min)"].keys())[0]
         values = []
-        for e in raw_data["Time Series (1min)"]:
-            values.append(raw_data["Time Series (1min)"][e].get('4. close', 0))
+        for i, e in enumerate(raw_data["Time Series (15min)"]):
+            if i > 95:  # Limit to the last 30 days
+                break
+            values.append(raw_data["Time Series (15min)"][e].get('4. close', 0))
             
         data = SimpleNamespace(
             last_refreshed=raw_data.get('Meta Data', {}).get('3. Last Refreshed', ''),
-            current_value = raw_data["Time Series (1min)"][first_timestamp].get('1. open', 'Open Vacio'),
+            current_value = raw_data["Time Series (15min)"][first_timestamp].get('1. open', 'Open Vacio'),
             values = values,
         )
         return data if raw_data else None
@@ -88,7 +90,7 @@ class Scraper():
         raw_data = r.json()
         values = []
         for i, e in enumerate(raw_data["Weekly Time Series"]):
-            if i > 48:  # Limit to the last 30 days
+            if i > 48:  # Limit to the last 48 weeks (1 year)
                 break
             values.append(raw_data["Weekly Time Series"][e].get('4. close', 0))
             
@@ -102,5 +104,5 @@ class Scraper():
 if __name__ == "__main__":
     # Test
     scrap = Scraper()
-    
+    print(scrap.get_info_and_1D_graph('AAPL'))
     print("Estas en un entorno de pruebas para Scrapper, si quieres ejecutar el programa, ejecuta el main.py")
