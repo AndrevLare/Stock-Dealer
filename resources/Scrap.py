@@ -12,7 +12,7 @@ load_dotenv()
 class Scraper():
     """Scraper class to interact with the Alpha Vantage API."""
     def __init__(self):
-        self.__api_keys__ = [os.getenv('API_KEY_2', 'demo'), os.getenv('API_KEY_3', 'demo'), os.getenv('API_KEY_4', 'demo'), 
+        self.__api_keys__ = [os.getenv('API_KEY_1', 'demo'), os.getenv('API_KEY_2', 'demo'), os.getenv('API_KEY_3', 'demo'), os.getenv('API_KEY_4', 'demo'), 
                              os.getenv('API_KEY_5', 'demo'), os.getenv('API_KEY_6', 'demo'), os.getenv('API_KEY_7', 'demo'), 
                              os.getenv('API_KEY_8', 'demo'), os.getenv('API_KEY_9', 'demo'), os.getenv('API_KEY_10', 'demo'),
                              os.getenv('API_KEY_11', 'demo'), os.getenv('API_KEY_12', 'demo'), os.getenv('API_KEY_13', 'demo')]

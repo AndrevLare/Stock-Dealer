@@ -42,12 +42,13 @@
       .div__graphs-container {
         width: 100%;
         display: flex;
+        flex-direction: column; /* Cambiado a columna para mejor flujo en PDF */
+        align-items: center;
         justify-content: center;
         margin-top: 2rem;
       }
       .div__graphs-containers__sentiment-graph {
         width: 100%;
-        max-width: 700px;
       }
 
       .chart-container {
@@ -56,7 +57,6 @@
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           0 4px 6px -2px rgba(0, 0, 0, 0.05);
         padding: 2rem;
-        width: 100%;
         position: relative; /* Needed for absolute positioning of marker */
         overflow: hidden; /* Hide anything that goes outside */
       }
@@ -218,6 +218,43 @@
         .threshold-label {
           font-size: 0.625rem;
         }
+        .div {
+          width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+          padding: 1rem;
+        }
+        .chart-title {
+          font-size: 1.25rem; /* Tamaño de fuente más pequeño para pantallas pequeñas */
+        }
+        .new-page {
+          page-break-before: always;
+          padding-top: 2rem; /* Espacio antes de la nueva página */
+          display: block;
+        }
+        .div__graphs-container {
+          width: 100%;
+        }
+        .div__time-graphs-container {
+          width: 100%;
+        }
+        .div__time-graphs-container div {
+          width: 67%;
+          margin: auto;
+          background-color: #ffffff;
+          padding: 10px;
+          border-radius: 1rem; /* Rounded corners */
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+            0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          margin-bottom: 20px; /* Espacio entre gráficos */
+          margin-inline: auto; /* Centrar los gráficos */
+        }
+        .div__graphs-container__1d-graph--graph {
+          margin: auto;
+          width: 90%;
+          height: auto; /* Mantiene la proporción de la imagen */
+        }
+        .info--description {
+          text-align: center; /* Centrar el título */
+        }
       }
     </style>
   </head>
@@ -268,8 +305,37 @@
         </div>
       </div>
     </div>
-    <div class="div">
-      <div class="div__info-container"></div>
+    <div class="info">
+      <p class="info--description">{{COMPANY_DESPRIPTION}}</p>
+      <p class="info"></p>
+    </div>
+    <div class="div_graphs-container new-page">
+      <div class="div__time-graphs-container">
+        <div>
+          <h2 class="chart-title">Ultimo dia</h2>
+          <img
+            src="{{DAY_GRAPH}}"
+            alt="1 day graph"
+            class="div__graphs-container__1d-graph--graph"
+          />
+        </div>
+        <div>
+          <h2 class="chart-title">Ultimo mes</h2>
+          <img
+            src="{{MONTH_GRAPH}}"
+            alt="1 motnth graph"
+            class="div__graphs-container__1d-graph--graph"
+          />
+        </div>
+        <div>
+          <h2 class="chart-title">Ultimo año</h2>
+          <img
+            src="{{YEAR_GRAPH}}"
+            alt="1 year graph"
+            class="div__graphs-container__1d-graph--graph"
+          />
+        </div>
+      </div>
     </div>
     <script>
       // Este script ahora solo es para fines de depuración o si se añade interactividad futura en el navegador.
