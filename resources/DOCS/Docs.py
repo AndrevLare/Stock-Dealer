@@ -1,7 +1,7 @@
 import os
 import jinja2
 import pdfkit
-from ImageGenerator import Grapher
+from .ImageGenerator import Grapher
 from types import SimpleNamespace as namespace
 class PDF:
     def __init__(self, info: dict, output_path, css_path=None):

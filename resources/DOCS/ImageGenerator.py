@@ -7,11 +7,18 @@ import os # Importar el módulo os para manejar rutas de archivos
 class Grapher():
     def __init__(self, time_info):
         self.last_refreshed = time_info.last_refreshed
-        self.current_value = time_info.current_value
         self.data = time_info.values
+        
+        try:
+            self.current_value = time_info.current_value
+        except:
+            self.current_value = 0
 
         # Asegurarse de que el formato de tiempo sea compatible con matplotlib
-        self.time = [datetime.strptime(point[1], '%Y-%m-%d %H:%M:%S') for point in self.data]
+        try:
+            self.time = [datetime.strptime(point[1], '%Y-%m-%d %H:%M:%S') for point in self.data]
+        except:
+            self.time = [datetime.strptime(point[1], '%Y-%m-%d') for point in self.data]
         self.values = [float(point[0]) for point in self.data]
 
     def graph_gui(self):

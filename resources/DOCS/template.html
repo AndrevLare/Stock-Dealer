@@ -42,7 +42,7 @@
         font-size: 2.25rem; /* text-2xl */
         font-weight: 600; /* font-semibold */
         color: #000000; /* Slate-500 */
-        padding-inline: 2rem; /* Espacio a los lados */
+        padding-inline: 4rem; /* Espacio a los lados */
         text-align: center; /* Alineado al centro para el nombre de la empresa */
         margin-bottom: 3rem;
       }
@@ -344,39 +344,43 @@
     <h1 class="console-time">{{CONSOLE_TIME}}</h1>
     <h1 class="exchange">{{EXCHANGE}}</h1>
     <h1 class="company-name">{{NAME}}({{TICKER}})</h1>
-    <h4 class="stock-price-header">Current Value: <span class="stock-price">${{VALUE}}</span></h4>
-    <h4 class="stock-price-header">Dividend per share: <span class="stock-price">${{DIVIDEND_P_S}}</span></h4>
-<hr class ="solid-line" />
-<table class="data-table">
-            <tbody>
-                <tr>
-                    <td class="data-header">Type:</td>
-                    <td class="data-value">{{ASSET_TYPE}}</td>
-                    <td class="data-header">Website:</td>
-                    <td class="data-value"><a href="{{WEBSITE}}" target="_blank">{{WEBSITE}}</a></td>
-                </tr>
-                <tr>
-                    <td class="data-header">Country:</td>
-                    <td class="data-value">{{COUNTRY}}</td>
-                    <td class="data-header">Fiscal Year End:</td>
-                    <td class="data-value">{{FISCAL_YEAR_END}}</td>
-                </tr>
-                <tr>
-                    <td class="data-header">Sector:</td>
-                    <td class="data-value">{{SECTOR}}</td>
-                    <td class="data-header">Latest Quarter:</td>
-                    <td class="data-value">{{LATEST_QUARTER}}</td>
-                </tr>
-                <tr>
-                    <td class="data-header">Industry:</td>
-                    <td class="data-value">{{INDUSTRY}}</td>
-                    <td class="data-header">Ex-Dividend Date:</td>
-                    <td class="data-value">{{EX_DIVIDEND_DATE}}</td>
-                </tr>
-            </tbody>
-        </table>
-
-
+    <h4 class="stock-price-header">
+      Current Value: <span class="stock-price">${{VALUE}}</span>
+    </h4>
+    <h4 class="stock-price-header">
+      Dividend per share: <span class="stock-price">${{DIVIDEND_P_S}}</span>
+    </h4>
+    <hr class="solid-line" />
+    <table class="data-table">
+      <tbody>
+        <tr>
+          <td class="data-header">Type:</td>
+          <td class="data-value">{{ASSET_TYPE}}</td>
+          <td class="data-header">Website:</td>
+          <td class="data-value">
+            <a href="{{WEBSITE}}" target="_blank">{{WEBSITE}}</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="data-header">Country:</td>
+          <td class="data-value">{{COUNTRY}}</td>
+          <td class="data-header">Fiscal Year End:</td>
+          <td class="data-value">{{FISCAL_YEAR_END}}</td>
+        </tr>
+        <tr>
+          <td class="data-header">Sector:</td>
+          <td class="data-value">{{SECTOR}}</td>
+          <td class="data-header">Latest Quarter:</td>
+          <td class="data-value">{{LATEST_QUARTER}}</td>
+        </tr>
+        <tr>
+          <td class="data-header">Industry:</td>
+          <td class="data-value">{{INDUSTRY}}</td>
+          <td class="data-header">Ex-Dividend Date:</td>
+          <td class="data-value">{{EX_DIVIDEND_DATE}}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="div__graphs-container">
       <div class="div__graphs-containers__sentiment-graph">
@@ -420,7 +424,7 @@
         </div>
       </div>
     </div>
-    <hr class ="solid-line" />
+    <hr class="solid-line" />
     <h2 class="overview-header">Overview</h2>
     <div class="info">
       <p class="info--description">{{COMPANY_DESCRIPTION}}</p>
