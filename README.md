@@ -63,9 +63,10 @@ class Scraper {
     }
 
     class CreatePDF {
-        - data_dict: defaultdict
-        + __init__(data: dict)
-        + to_pdf(filename=None)
+        - info: dict
+        - output_path: r str
+        + __init__(info: dict, output_path: str)
+        + to_pdf()
     }
 
     Interface "1" *-- "2" CodeInput: contains
