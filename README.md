@@ -11,30 +11,123 @@
 ## Diagrama de clases:
 
 ```mermaid
-
 classDiagram
 
     class Interface {
-        +CodeInput input
-        +CodeInput compare
-        +ttk.Button compare_button
+        +style
+        +heading
+        +main_page
+        +stock_page
         +__init__()
+        +to_main_page()
+        +to_stock_page(ticker:str)
     }
 
-    class CodeInput {
-        +Interface parent
-        +ttk.Label label
-        +ttk.Entry ticker_entry
-        +ttk.Entry exchange_entry
-        +ttk.Button button
-        +ttk.Label missing_code
-        +__init__()
-        +get_codes()
-        -create_info_page(data : dict)
-        -process_data()
+    class Heading {
+        +parent
+        +title
+        +search
+        +__init__(parent)
     }
 
-class Scraper {
+    class Search {
+        +parent
+        +label
+        +input
+        +button
+        +__init__(parent)
+        __create_stock_page()
+    }
+
+    class MainPage {
+        +parent
+        +winners
+        +losers
+        +actives
+        +__init__(parent)
+    }
+
+    class TopsWidget {
+        +parent
+        +label
+        +section
+        +w_1
+        +w_2
+        +w_3
+        +w_4
+        +w_5
+        +__init__(parent, data, section)
+    }
+
+    class InfoNotObtained {
+        +label
+    }
+
+    class StockMiniInfo {
+        +parent
+        +section
+        +label_1
+        +label_2
+        +__init__(parent, data)
+        __create_stock_page(ticker)
+    }
+
+    class StockPage {
+        +price
+        +sentiment
+        +info
+        +__init__(parent, data)
+        +pdf_download()
+    }
+
+    class InfoTab {
+        +parent
+        +title
+        +description
+        +stock_info
+        +sentiment
+        +button
+        +__init__(parent, data)
+    }
+
+    class GraphTab {
+        +title
+        +subtitle
+        +info
+        +time
+        +grapher
+        +fig
+        +canvas
+        +__init__(parent, graph_data, data, string) 
+    }
+
+    class StockInfo {
+        +price
+        +titles
+        +values
+        +__init__(parent, data, price)
+    }
+
+    class Sentimentmeter {
+        +width
+        +height
+        +stock_name
+        +canvas
+        +min_val
+        +max_val
+        +ranges
+        +labels
+        +arrow_id
+        +value_text_id
+        +value_bg_rect_id
+
+        +__init__(parent, value: float, stock_name: str)
+        +draw_gauge()
+        -_value_to_x(value: float) float
+        +set_value(value: float)
+    }
+
+    class Scraper {
         +__init__()
         +winners_lossers_actives(): dict
         +get_info_and_1D_graph(ticker:string): dict
@@ -56,11 +149,6 @@ class Scraper {
         -create_compare_page()
     }
 
-    class ComparePage {
-        + __init__()
-        + compare_stocks()
-    }
-
     class CreatePDF {
         - info: dict
         - output_path: r str
@@ -77,14 +165,37 @@ class Scraper {
     Interface "1" *-- "2" CodeInput: contains
 
     Interface --|> tk.Tk
-    CodeInput --> Scraper: uses
-    CodeInput *-- DataPage: creates
-    DataPage --> CreatePDF: uses
-    DataPage --> Grapher: uses
-    CodeInput --|> ttk.Frame
-    ComparePage --|> DataPage
-    DataPage --|> ttk.Frame
-    ComparePage --* Interface
+    Heading --|> ttk.Frame
+    Search --|> ttk.Frame
+    MainPage --|> ttk.Frame
+    TopsWidget --|> ttk.Frame
+    InfoNotObtained --|> ttk.Frame
+    StockMiniInfo --|> ttk.Frame
+    StockPage --|> ttk.Notebook
+    InfoTab --|> ttk.Frame
+    GraphTab --|> ttk.Frame
+    StockInfo --|> ttk.Frame
+    Sentimentmeter --|> ttk.Frame
+
+    Interface "1" *-- "1" Heading : Contiene
+    Interface "1" *-- "1" MainPage : Contiene
+    Interface "1" *-- "0..1" StockPage : Contiene (dinámico)
+
+    Heading "1" *-- "1" Search : Contiene
+
+    MainPage "1" *-- "3" TopsWidget : Contiene (Winners, Losers, Actives)
+    TopsWidget "1" *-- "5" StockMiniInfo : Contiene (hasta 5 items)
+
+    StockPage "1" *-- "1" InfoTab : Contiene
+    StockPage "1" *-- "3" GraphTab : Contiene (1D, 1M, 1Y)
+    InfoTab "1" *-- "1" StockInfo : Contiene
+    InfoTab "1" *-- "1" Sentimentmeter : Contiene
+
+    MainPage ..> Scraper : Usa para obtener datos
+    StockPage ..> Grapher : Usa para gráficos
+    StockPage ..> PDF : Usa para generar reportes
+    StockMiniInfo ..> Interface : Navega a StockPage
+    Search ..> Interface : Navega a StockPage
 ```
 
 ## Antes de empezar:
