@@ -5,9 +5,9 @@ import webbrowser
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, 
 NavigationToolbar2Tk)
 from tkinter import filedialog
-from resources.Scrap import Scraper
 from resources.DOCS.ImageGenerator import Grapher
-
+from resources.Scrap import Scraper
+from resources.DOCS.Docs import PDF
 
 from types import SimpleNamespace   #LUEGO SE BORRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
@@ -240,12 +240,7 @@ class StockMiniInfo(ttk.Frame):
     def __create_stock_page(self, ticker):
         self.parent.parent.parent.to_stock_page(ticker)
 
-    # def save_file(self):
-    #     save_file = filedialog.asksaveasfilename(
-    #                 defaultextension = ".pdf",
-    #                 title = "Save PDF",
-    #                 initialfile = f"{self.data['stock_name']}.pdf")
-    #     self.pdf_create.to_pdf(save_file)
+
 
 class StockPage(ttk.Notebook):
     def __init__(self, parent, data):
@@ -264,9 +259,49 @@ class StockPage(ttk.Notebook):
 
         self.add(GraphTab(self, data['Graph1D'], data['Info'], "1-Year Graph"), text = "1-Year Graph")
 
+        grapher1 = Grapher(data['Graph1D'].values)
+        day_path = grapher1.plot(filename="day_graph.png")
+        grapher2 = Grapher(data['Graph1D'].values)
+        month_path = grapher2.plot(filename="month_graph.png")
+        grapher3 = Grapher(data['Graph1D'].values)
+        year_path = grapher3.plot(filename="year_graph.png")
+    
+
+        self.info = {
+            "SENTIMENT_VALUE": 0.2,
+            "EXCHANGE": data['Info'].Exchange,
+            "NAME": data['Info'].Name,
+            "TICKER": data['Info'].Symbol,
+            "VALUE": data['Info'].Value,
+            "DAY_GRAPH":day_path,
+            "MONTH_GRAPH":month_path,
+            "YEAR_GRAPH":year_path,
+            "COMPANY_DESCRIPTION": data['Info'].Description,
+            "ASSET_TYPE": data['Info'].AssetType,
+            "COUNTRY": data['Info'].Country,
+            "SECTOR": data['Info'].Sector,
+            "INDUSTRY": data['Info'].Industry,
+            "FISCAL_YEAR_END": data['Info'].FiscalYearEnd,
+            "LATEST_QUARTER": data['Info'].LatestQuarter,
+            "DIVIDEND_P_S": data['Info'].DividendPerShare,
+            "WEBSITE": data['Info'].OfficialSite,
+            "EX_DIVIDEND_DATE": data['Info'].ExDividendDate,
+            "CONSOLE_TIME": data['Graph1D'].last_refreshed,
+
+            }
+
+    def pdf_download(self):
+        save_file = filedialog.asksaveasfilename(
+                    defaultextension = ".pdf",
+                    title = "Save PDF",
+                    initialfile = f"{self.data['stock_name']}.pdf")
+        pdf = PDF(self.info, save_file)
+        pdf.to_pdf()
+
 class InfoTab(ttk.Frame):
     def __init__(self, parent, data):
         super().__init__(parent)
+        self.parent = parent
         self.columnconfigure((0, 1), weight = 1)
 
         if data == None:
@@ -284,16 +319,15 @@ class InfoTab(ttk.Frame):
         self.description.grid(row = 1, rowspan = 2,
                               column = 0, columnspan = 2,
                               sticky = "new", padx = 10, pady = 5)
-        # self.price = ttk.Label(self, text = f"Current price: {parent.price}",
-        #                        font = subtitle,
-        #                        bootstyle = "primary")
-        # self.price.grid(row = 0, column = 2, sticky = "nsew")
         stock_data = dict(list(vars(data).items())[:12])
         self.stock_info = StockInfo(self, stock_data, parent.price)
         self.stock_info.grid(row = 1, column = 1, sticky = "nsew")
 
         self.sentiment = Sentimentmeter(self, parent.sentiment, data.Symbol)
         self.sentiment.grid(row = 2, column = 0, columnspan = 2)
+
+        self.button = ttk.Button(self, text = "Download PDF", command = self.parent.pdf_download)
+
 
 
 class GraphTab(ttk.Frame):

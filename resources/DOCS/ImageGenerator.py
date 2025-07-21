@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 from types import SimpleNamespace as namespace
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os # Importar el módulo os para manejar rutas de archivos
 
 class Grapher():
@@ -12,6 +13,16 @@ class Grapher():
         # Asegurarse de que el formato de tiempo sea compatible con matplotlib
         self.time = [datetime.strptime(point[1], '%Y-%m-%d %H:%M:%S') for point in self.data]
         self.values = [float(point[0]) for point in self.data]
+
+    def graph_gui(self):
+        fig = plt.Figure(figsize=(3, 4))
+        ax = fig.add_subplot(111)
+        ax.plot(self.time, self.values, marker='o', linestyle='-', markersize=4)
+        ax.set_xlabel("Fecha y Hora")
+        ax.set_ylabel("Valor")
+        ax.grid(True)
+        fig.autofmt_xdate()
+        return fig
 
     def plot(self, filename="stock_price_plot.png"):
         """
