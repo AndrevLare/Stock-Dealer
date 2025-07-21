@@ -38,6 +38,87 @@
         font-size: 1.875rem; /* text-3xl */
         font-weight: 700; /* font-bold */
       }
+      .company-name {
+        font-size: 2.25rem; /* text-2xl */
+        font-weight: 600; /* font-semibold */
+        color: #000000; /* Slate-500 */
+        padding-inline: 2rem; /* Espacio a los lados */
+        text-align: center; /* Alineado al centro para el nombre de la empresa */
+        margin-bottom: 3rem;
+      }
+      .exchange {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 600; /* font-semibold */
+        color: #64748b; /* Slate-500 */
+        position: absolute;
+        top: 0.75rem;
+        right: 1rem;
+        background-color: #ffffff;
+        border-radius: 1rem; /* Rounded corners */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        padding: 0.5rem 1rem; /* Espaciado interno */
+      }
+      .console-time {
+        font-size: 1rem; /* text-sm */
+        font-weight: 500; /* font-normal */
+        color: #64748b; /* Slate-500 */
+        position: absolute;
+        top: 35cm;
+        padding: 0.5rem 1rem; /* Espaciado interno */
+        text-align: center; /* Alineado al centro */
+        left: 41%;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse; /* Elimina los espacios entre celdas */
+      }
+      .solid-line {
+        height: 0.15rem;
+        margin-top: 3.5rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #e2e8f0; /* Slate-200 */
+      }
+      .stock-price-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+      .stock-price-header {
+        font-size: 1.25rem;
+        font-weight: 600; /* font-semibold */
+        color: #64748b; /* Slate-500 */
+        text-align: center; /* Alineado al centro para el encabezado */
+        margin-bottom: 0.5rem; /* Espacio debajo del encabezado */
+        margin-top: 0.5rem; /* Espacio encima del encabezado */
+      }
+      .stock-price {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 600; /* font-semibold */
+        color: #16a34a; /* green-700 */
+      }
+      .overview-header {
+        font-size: 2.5rem; /* text-2xl */
+        font-weight: 600; /* font-bold */
+        color: #64748b; /* Slate-500 */
+        margin-block: 0.5rem 1rem;
+      }
+      .data-header {
+        font-weight: 700; /* font-semibold */
+        color: #64748b; /* Slate-500 */
+        padding: 0.5rem 0.25rem;
+        text-align: right;
+      }
+      .data-value {
+        font-weight: 500; /* font-normal */
+        padding: 0.5rem 0rem;
+        text-align: left;
+        color: #000000;
+      }
+      a {
+        color: #6790e8; /* blue-600 */
+      }
 
       .div__graphs-container {
         width: 100%;
@@ -182,7 +263,7 @@
         left: 85%;
       }
       .threshold-label.label-05 {
-        left: 100%;
+        left: 98%;
       }
 
       /* Media queries para responsividad (wkhtmltopdf tiene soporte limitado, pero es buena práctica) */
@@ -253,14 +334,50 @@
           height: auto; /* Mantiene la proporción de la imagen */
         }
         .info--description {
-          text-align: center; /* Centrar el título */
+          text-align: justify; /* Justificar el texto */
+          font-size: 1.15rem;
         }
       }
     </style>
   </head>
   <body>
-    <h1>{{NAME}}({{TICKER}})</h1>
-    <h2>${{VALUE}}</h2>
+    <h1 class="console-time">{{CONSOLE_TIME}}</h1>
+    <h1 class="exchange">{{EXCHANGE}}</h1>
+    <h1 class="company-name">{{NAME}}({{TICKER}})</h1>
+    <h4 class="stock-price-header">Current Value: <span class="stock-price">${{VALUE}}</span></h4>
+    <h4 class="stock-price-header">Dividend per share: <span class="stock-price">${{DIVIDEND_P_S}}</span></h4>
+<hr class ="solid-line" />
+<table class="data-table">
+            <tbody>
+                <tr>
+                    <td class="data-header">Type:</td>
+                    <td class="data-value">{{ASSET_TYPE}}</td>
+                    <td class="data-header">Website:</td>
+                    <td class="data-value"><a href="{{WEBSITE}}" target="_blank">{{WEBSITE}}</a></td>
+                </tr>
+                <tr>
+                    <td class="data-header">Country:</td>
+                    <td class="data-value">{{COUNTRY}}</td>
+                    <td class="data-header">Fiscal Year End:</td>
+                    <td class="data-value">{{FISCAL_YEAR_END}}</td>
+                </tr>
+                <tr>
+                    <td class="data-header">Sector:</td>
+                    <td class="data-value">{{SECTOR}}</td>
+                    <td class="data-header">Latest Quarter:</td>
+                    <td class="data-value">{{LATEST_QUARTER}}</td>
+                </tr>
+                <tr>
+                    <td class="data-header">Industry:</td>
+                    <td class="data-value">{{INDUSTRY}}</td>
+                    <td class="data-header">Ex-Dividend Date:</td>
+                    <td class="data-value">{{EX_DIVIDEND_DATE}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
     <div class="div__graphs-container">
       <div class="div__graphs-containers__sentiment-graph">
         <div class="chart-container">
@@ -303,8 +420,10 @@
         </div>
       </div>
     </div>
+    <hr class ="solid-line" />
+    <h2 class="overview-header">Overview</h2>
     <div class="info">
-      <p class="info--description">{{COMPANY_DESPRIPTION}}</p>
+      <p class="info--description">{{COMPANY_DESCRIPTION}}</p>
       <p class="info--"></p>
     </div>
     <div class="div_graphs-container new-page">

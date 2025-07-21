@@ -21,7 +21,7 @@ class PDF:
             "margin-bottom": "0.05in",
             "margin-left": "0.05in",
             "encoding": "UTF-8",
-            "enable-local-file-access": None 
+            "enable-local-file-access": None
         }
         
         # --- CÓDIGO CORREGIDO Y CON DEPURACIÓN ---
@@ -72,14 +72,26 @@ if __name__ == "__main__":
     info = {
             "tickers": tickers, 
             "SENTIMENT_VALUE": 0.2,
+            "EXCHANGE": data.Exchange,
             "NAME": data.Name,
             "TICKER": data.Symbol,
             "VALUE": data.Value,
             "DAY_GRAPH":day_path,
             "MONTH_GRAPH":month_path,
             "YEAR_GRAPH":year_path,
-            "COMPANY_DESPRIPTION": data.Description,
+            "COMPANY_DESCRIPTION": data.Description,
+            "ASSET_TYPE": data.AssetType,
+            "COUNTRY": data.Country,
+            "SECTOR": data.Sector,
+            "INDUSTRY": data.Industry,
+            "FISCAL_YEAR_END": data.FiscalYearEnd,
+            "LATEST_QUARTER": data.LatestQuarter,
+            "DIVIDEND_P_S": data.DividendPerShare,
+            "WEBSITE": data.OfficialSite,
+            "EX_DIVIDEND_DATE": data.ExDividendDate,
+            "CONSOLE_TIME": time_info.last_refreshed,
+
             }
-    pdf = PDF(info,r"D:\Projects\POO Proyect\PRUEBA.pdf")
+    pdf = PDF(info,r"C:\Users\danie\OneDrive\Documentos\POOyecto\Prueba.pdf")
     pdf.to_pdf()
     print("PDF generado exitosamente en D:\\Projects\\POO Proyect\\PRUEBA.pdf")
