@@ -26,6 +26,7 @@ class Interface(tk.Tk):
         '''
         super().__init__()
         self.style = ttk.Style(theme = "darkly")
+        self.iconbitmap("stock-dealer.ico")
         self.minsize(width = 100, height = 700)
         self.geometry("1920x1080")
         self.title("Stock dealer 🐛")
