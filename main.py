@@ -438,6 +438,8 @@ class Sentimentmeter(ttk.Frame):
             self.canvas.create_line(x, y_bottom, x, y_bottom + 5, fill="#555555")
 
     def _value_to_x(self, value):
+        if value == None:
+            value = 0.0
         range_val = self.max_val - self.min_val
         normalized_val = (value - self.min_val) / range_val
         x = normalized_val * self.width
