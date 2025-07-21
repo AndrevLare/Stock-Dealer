@@ -1,10 +1,10 @@
 # _Stock-Dealer_ (POOyecto)
 
-<img src="/stock-dealer.ico" alt="ICON" width="750" />
+<img src="Misc/stock-dealer.jpg" alt="ICON" width="1000" />
 ## AUTORES
 <h3 style="display: flex; align-items:center">
-<img src="Misc/Taizoo.jpeg" alt="TaizooNameplate" width="262"/>
-  <img src="Misc/Gorje.jpeg" alt="GorjeNameplate" width="262"/>
+<img src="Misc/Taizoo.jpeg" alt="TaizooNameplate" width="262"/><span>ㅤㅤ­­­­</span><span>ㅤㅤ­­­­</span>
+  <img src="Misc/Gorje.jpeg" alt="GorjeNameplate" width="262"/><span>ㅤㅤ­­­­</span><span>ㅤㅤ­­­­</span>
   <img src="Misc/Daniel.jpeg" alt="DanielNameplate" width="291"/>
 </h3>
 
