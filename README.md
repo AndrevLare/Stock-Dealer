@@ -35,15 +35,14 @@ classDiagram
     }
 
 class Scraper {
-        +dict headers
-        +list main_data_keys
-        +str stock
-        +str exchange
-        +__init__(stock: str, exchange: str)
-        +get_info() dict
-        - get_chart_data()
-        - get_text_from_html_list(list_: list) dict
-        - request_data(url: str) requests.Response | None
+        +__init__()
+        +winners_lossers_actives(): dict
+        +get_info_and_1D_graph(ticker:string): dict
+        +get_1M_graph(ticker:string): dict
+        +get_1Y_graph(ticker:string): dict
+        +company_info(ticker:string): dict
+        +get_ticker_sentiment(ticker:string): float
+        - api_key()
     }
 
     class DataPage {
