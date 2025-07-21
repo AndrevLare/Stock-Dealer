@@ -1,31 +1,288 @@
-<meta charset="UTF-8">
+<!DOCTYPE html>
 <html lang="es">
-<html>
-<head>
-<title>{{TITULO}}</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{TITULO}}</title>
+    <!-- Carga de la fuente Inter directamente con <link> para mayor compatibilidad con wkhtmltopdf -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Todos los estilos CSS incrustados aquí para evitar dependencias externas */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* Light gray background */
+        display: flex;
+        flex-direction: column; /* Cambiado a columna para mejor flujo en PDF */
+        align-items: center;
+        justify-content: flex-start; /* Alineado al inicio para PDF */
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        color: #1e293b; /* Color de texto base */
+        margin: 0; /* Elimina el margen predeterminado del body */
+      }
+      h1,
+      h2 {
+        color: #1e293b; /* Slate-900 */
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-size: 2.5rem; /* text-4xl */
+        font-weight: 800; /* font-extrabold */
+      }
+      h2 {
+        font-size: 1.875rem; /* text-3xl */
+        font-weight: 700; /* font-bold */
+      }
 
-<h1>GANADORES Y PERDEDORES!</h1>
+      .div__graphs-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+      .div__graphs-containers__sentiment-graph {
+        width: 100%;
+        max-width: 700px;
+      }
 
-<table class="table" border="1">
-  <tr class="table__tr">
-    <th class="table__tr__th">Ticker</th>
-    <th class="table__tr__th">Price</th>
-    <th class="table__tr__th">Change Amount</th>
-    <th class="table__tr__th">Change %</th>
-    <th class="table__tr__th">Volume</th>
-  </tr>
-  {% for t in tickers %}
-  <tr>
-    <td class="table__tr__td">{{ t.ticker }}</td>
-    <td class="table__tr__td">{{ t.price }}</td>
-    <td class="table__tr__td">{{ t.change_amount }}</td>
-    <td class="table__tr__td">{{ t.change_percentage }}</td>
-    <td class="table__tr__td">{{ t.volume }}</td>
-  </tr>
-  {% endfor %}
-</table>
+      .chart-container {
+        background-color: #ffffff;
+        border-radius: 1rem; /* Rounded corners */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        padding: 2rem;
+        width: 100%;
+        position: relative; /* Needed for absolute positioning of marker */
+        overflow: hidden; /* Hide anything that goes outside */
+      }
+      .chart-title {
+        font-size: 1.75rem; /* text-3xl */
+        font-weight: 700; /* font-bold */
+        color: #1e293b; /* Slate-900 */
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .sentiment-bar-wrapper {
+        width: 100%;
+        height: 40px; /* Height of the bar */
+        display: table; /* ¡CAMBIO! Usar display: table */
+        table-layout: fixed; /* ¡CAMBIO! Para distribuir columnas uniformemente */
+        border-radius: 0.75rem; /* Rounded corners for the bar */
+        overflow: hidden; /* Ensures rounded corners apply to segments */
+        position: relative;
+        z-index: 1; /* Ensure bar is below marker text */
+      }
+      .sentiment-segment {
+        height: 100%;
+        display: table-cell; /* ¡CAMBIO! Usar display: table-cell */
+        align-items: center; /* No aplica directamente a table-cell, pero se mantiene */
+        vertical-align: middle; /* Centrar verticalmente en table-cell */
+        justify-content: center; /* No aplica directamente a table-cell, pero se mantiene */
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem; /* text-sm */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para el texto */
+        text-align: center; /* Centra texto en cada segmento */
+        padding: 0 5px; /* Pequeño padding para el texto */
+        white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+        /* flex-shrink y flex-grow eliminados, ya no son necesarios con table-cell */
+      }
 
-</body>
+      /* Colores y anchos de los segmentos basados en el rango de -0.5 a 0.5 */
+      .segment-bearish {
+        background-color: #ef4444; /* red-500 */
+        width: 15%; /* (-0.35 - (-0.5)) / 1.0 = 0.15 / 1.0 = 15% */
+      }
+      .segment-somewhat-bearish {
+        background-color: #f97316; /* orange-500 */
+        width: 20%; /* (-0.15 - (-0.35)) / 1.0 = 0.20 / 1.0 = 20% */
+      }
+      .segment-neutral {
+        background-color: #94a3b8; /* slate-400 */
+        width: 30%; /* (0.15 - (-0.15)) / 1.0 = 0.30 / 1.0 = 30% */
+      }
+      .segment-somewhat-bullish {
+        background-color: #22c55e; /* green-500 */
+        width: 20%; /* (0.35 - 0.15) / 1.0 = 0.20 / 1.0 = 20% */
+      }
+      .segment-bullish {
+        background-color: #16a34a; /* green-700 */
+        width: 15%; /* (0.5 - 0.35) / 1.0 = 0.15 / 1.0 = 15% */
+      }
+
+      /* Marcador de valor */
+      .sentiment-marker {
+        position: absolute;
+        top: calc(50% + 10px); /* Posicionar debajo de la barra */
+        /* La posición 'left' ahora se inyecta directamente con Jinja en el HTML */
+        transform: translateX(-50%); /* Centrar el marcador en su punto */
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .marker-triangle {
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 10px solid #1e293b; /* Color del triángulo (Slate-900) */
+        margin-bottom: 5px;
+      }
+
+      .marker-value {
+        background-color: #1e293b; /* Slate-900 */
+        color: white;
+        padding: 0.25rem 0.5rem; /* Espaciado interno */
+        border-radius: 0.5rem; /* Bordes redondeados */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 600;
+        white-space: nowrap; /* Evita que el texto se rompa */
+      }
+
+      /* Estilos de las etiquetas de los umbrales */
+      .threshold-labels {
+        position: relative; /* ¡CAMBIO! Vuelve a relative para el contenedor */
+        width: 100%;
+        height: 20px; /* Altura suficiente para las etiquetas */
+        margin-top: 0.5rem;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+      }
+      .threshold-label {
+        font-size: 0.75rem; /* text-xs */
+        color: #64748b; /* Slate-500 */
+        text-align: center;
+        position: absolute; /* ¡CAMBIO! Posicionamiento absoluto para cada etiqueta */
+        transform: translateX(
+          -50%
+        ); /* Centrar la etiqueta en su punto 'left' */
+        white-space: nowrap; /* Evita que el texto se rompa */
+      }
+      /* Posicionamiento preciso de cada etiqueta de umbral */
+      .threshold-label.label-minus-05 {
+        left: 0%;
+      }
+      .threshold-label.label-minus-035 {
+        left: 15%;
+      }
+      .threshold-label.label-minus-015 {
+        left: 35%;
+      }
+      .threshold-label.label-015 {
+        left: 65%;
+      }
+      .threshold-label.label-035 {
+        left: 85%;
+      }
+      .threshold-label.label-05 {
+        left: 100%;
+      }
+
+      /* Media queries para responsividad (wkhtmltopdf tiene soporte limitado, pero es buena práctica) */
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 1.875rem;
+        }
+        h2 {
+          font-size: 1.5rem;
+        }
+        .chart-container {
+          padding: 1rem;
+        }
+        .chart-title {
+          font-size: 1.25rem;
+          margin-bottom: 1.5rem;
+        }
+        .sentiment-bar-wrapper {
+          height: 30px;
+        }
+        .sentiment-segment {
+          font-size: 0.75rem;
+        }
+        .marker-triangle {
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 8px solid #1e293b;
+        }
+        .marker-value {
+          font-size: 0.75rem;
+          padding: 0.15rem 0.4rem;
+        }
+        .threshold-label {
+          font-size: 0.625rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>{{NAME}}({{TICKER}})</h1>
+    <h2>${{VALUE}}</h2>
+    <div class="div__graphs-container">
+      <div class="div__graphs-containers__sentiment-graph">
+        <div class="chart-container">
+          <h2 class="chart-title">
+            Comprensión del Sentimiento de la Acción ({{TICKER}})
+          </h2>
+
+          <div class="sentiment-bar-wrapper">
+            <div class="sentiment-segment segment-bearish">Bajista</div>
+            <div class="sentiment-segment segment-somewhat-bearish">
+              Algo Bajista
+            </div>
+            <div class="sentiment-segment segment-neutral">Neutral</div>
+            <div class="sentiment-segment segment-somewhat-bullish">
+              Algo Alcista
+            </div>
+            <div class="sentiment-segment segment-bullish">Alcista</div>
+          </div>
+
+          <!-- Marcador de valor actual -->
+          <div
+            class="sentiment-marker"
+            style="left: {{ ((SENTIMENT_VALUE | default(0.0)) + 0.5) * 100 }}%;"
+          >
+            <div class="marker-triangle"></div>
+            <div class="marker-value">
+              <span class="sentiment-score-display"
+                >{{ SENTIMENT_VALUE | default(0.0) | round(4) }}</span
+              >
+            </div>
+          </div>
+
+          <!-- Etiquetas de los umbrales -->
+          <div class="threshold-labels">
+            <div class="threshold-label label-minus-05">-0.5</div>
+            <div class="threshold-label label-minus-035">-0.35</div>
+            <div class="threshold-label label-minus-015">-0.15</div>
+            <div class="threshold-label label-015">0.15</div>
+            <div class="threshold-label label-035">0.35</div>
+            <div class="threshold-label label-05">0.5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="div">
+      <div class="div__info-container"></div>
+    </div>
+    <script>
+      // Este script ahora solo es para fines de depuración o si se añade interactividad futura en el navegador.
+      // La posición del marcador y el valor mostrado ahora son inyectados directamente por Jinja.
+      document.addEventListener("DOMContentLoaded", () => {
+        const sentimentScoreDisplay = document.querySelector(
+          ".sentiment-score-display"
+        );
+
+        // Opcional: Si quieres leer el valor inyectado por Jinja para depuración en el navegador
+        // let sentiment_value = parseFloat(sentimentScoreDisplay.textContent);
+        // console.log("Valor de sentimiento inyectado por Jinja:", sentiment_value);
+      });
+    </script>
+  </body>
 </html>
