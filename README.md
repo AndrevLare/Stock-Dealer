@@ -68,12 +68,19 @@ class Scraper {
         + to_pdf()
     }
 
+    class Grapher {
+        - time_info: dict
+        + __init__(info: dict, output_path: str)
+        + plot(filename)
+    }
+
     Interface "1" *-- "2" CodeInput: contains
 
     Interface --|> tk.Tk
     CodeInput --> Scraper: uses
     CodeInput *-- DataPage: creates
     DataPage --> CreatePDF: uses
+    DataPage --> Grapher: uses
     CodeInput --|> ttk.Frame
     ComparePage --|> DataPage
     DataPage --|> ttk.Frame
