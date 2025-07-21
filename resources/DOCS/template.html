@@ -264,20 +264,18 @@
     <div class="div__graphs-container">
       <div class="div__graphs-containers__sentiment-graph">
         <div class="chart-container">
-          <h2 class="chart-title">
-            Comprensión del Sentimiento de la Acción ({{TICKER}})
-          </h2>
+          <h2 class="chart-title">Stock Market Feeling ({{TICKER}})</h2>
 
           <div class="sentiment-bar-wrapper">
-            <div class="sentiment-segment segment-bearish">Bajista</div>
+            <div class="sentiment-segment segment-bearish">Bearish</div>
             <div class="sentiment-segment segment-somewhat-bearish">
-              Algo Bajista
+              Somewhat-Bearish
             </div>
             <div class="sentiment-segment segment-neutral">Neutral</div>
             <div class="sentiment-segment segment-somewhat-bullish">
-              Algo Alcista
+              Somewhat_Bullish
             </div>
-            <div class="sentiment-segment segment-bullish">Alcista</div>
+            <div class="sentiment-segment segment-bullish">Bullish</div>
           </div>
 
           <!-- Marcador de valor actual -->
@@ -307,12 +305,12 @@
     </div>
     <div class="info">
       <p class="info--description">{{COMPANY_DESPRIPTION}}</p>
-      <p class="info"></p>
+      <p class="info--"></p>
     </div>
     <div class="div_graphs-container new-page">
       <div class="div__time-graphs-container">
         <div>
-          <h2 class="chart-title">Ultimo dia</h2>
+          <h2 class="chart-title">Last 24 Hours</h2>
           <img
             src="{{DAY_GRAPH}}"
             alt="1 day graph"
@@ -320,7 +318,7 @@
           />
         </div>
         <div>
-          <h2 class="chart-title">Ultimo mes</h2>
+          <h2 class="chart-title">Last 30 Days</h2>
           <img
             src="{{MONTH_GRAPH}}"
             alt="1 motnth graph"
@@ -328,7 +326,7 @@
           />
         </div>
         <div>
-          <h2 class="chart-title">Ultimo año</h2>
+          <h2 class="chart-title">Last 12 Months</h2>
           <img
             src="{{YEAR_GRAPH}}"
             alt="1 year graph"

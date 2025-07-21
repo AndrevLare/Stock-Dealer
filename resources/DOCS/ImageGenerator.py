@@ -22,8 +22,8 @@ class Grapher():
         filename = "resources/DOCS/temp/" + name
         plt.figure(figsize=(10, 6)) # Opcional: ajustar el tamaño de la figura
         plt.plot(self.time, self.values, marker='o', linestyle='-', markersize=4) # Añadir marcadores para visibilidad
-        plt.xlabel("Fecha y Hora")
-        plt.ylabel("Valor")
+        plt.xlabel("Date & Hour")
+        plt.ylabel("Price")
         plt.grid(True) # Añadir una cuadrícula para mejor lectura
 
         # Mejorar el formato del eje X para las fechas/horas
