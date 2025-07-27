@@ -68,3 +68,5 @@ error_screenshot.png # Tu archivo de depuración de Selenium
 # NO IGNORAR
 !resources/DOCS/temp/.gitkeep
 !.gitignore
+!main.py
+!resources/Scraping/Scrap.py

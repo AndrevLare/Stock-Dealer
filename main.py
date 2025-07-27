@@ -505,6 +505,8 @@ def clean_temp_files(root, folder):
     print(f"Iniciando limpieza de la carpeta: {folder}")
     if os.path.exists(folder):
         for nombre_archivo in os.listdir(folder):
+            if nombre_archivo == ".gitkeep":
+                continue
             ruta_archivo = os.path.join(folder, nombre_archivo)
             try:
                 if os.path.isfile(ruta_archivo) or os.path.islink(ruta_archivo):
