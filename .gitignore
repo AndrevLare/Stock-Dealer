@@ -8,6 +8,7 @@ venv/
 *.pyenv/
 
 # Archivos de caché y bytecode de Python
+resources/DOCS/temp/*
 __pycache__/
 *.pyc
 *.pyd
@@ -62,3 +63,8 @@ credentials.json
 # Docker
 # Archivos de selenium que puedan generarse
 error_screenshot.png # Tu archivo de depuración de Selenium
+
+
+# NO IGNORAR
+!resources/DOCS/temp/.gitkeep
+!.gitignore
