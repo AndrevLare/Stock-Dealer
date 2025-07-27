@@ -6,11 +6,11 @@ import pathlib
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, 
 NavigationToolbar2Tk)
 from tkinter import filedialog
-from resources.Scrap import Scraper
+from resources.Scraping.Scrap import Scraper
 from resources.DOCS.Docs import PDF
 from resources.DOCS.ImageGenerator import Grapher
 
-from types import SimpleNamespace   #LUEGO SE BORRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+from types import SimpleNamespace   
 
 import ttkbootstrap as ttk
 
@@ -154,9 +154,6 @@ class MainPage(ttk.Frame):
 
 class TopsWidget(ttk.Frame):
     def __init__ (self, parent, data:Scraper, section:str):
-
-        print(data)
-
         '''
         Initialization of Tops widgets (for showing top winners,
         top losers and most active)

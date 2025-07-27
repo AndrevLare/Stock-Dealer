@@ -42,7 +42,6 @@ class Scraper():
                 losers= raw_data.get('top_losers', []),
                 actives= raw_data.get('most_actively_traded', [])
             ) if raw_data else SimpleNamespace(winners=[], losers=[], actives=[])
-        print(data)
         return data
         
     def company_info(self, ticker):
