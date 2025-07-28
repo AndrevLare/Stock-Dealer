@@ -33,7 +33,7 @@ With Stock Dealer you can get info and analyze common stocks, look at the most a
    ```
 6. Run the main.py
 
-## Diagrama de clases:
+## Class Diagram:
 
 ```mermaid
 classDiagram
